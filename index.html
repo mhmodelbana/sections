@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technical Writing - Full 214 Questions</title>
+    <style>
+        :root { --blue: #1a73e8; --green: #28a745; --red: #dc3545; --bg: #f1f3f4; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+        .stats { position: fixed; top: 0; left: 0; width: 100%; background: var(--blue); color: white; padding: 10px; text-align: center; font-weight: bold; z-index: 1000; display: flex; justify-content: space-around; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        .container { max-width: 850px; margin: 60px auto 20px; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: var(--blue); margin-bottom: 30px; border-bottom: 2px solid var(--blue); pb: 10px; }
+        .q-card { margin-bottom: 30px; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; transition: 0.3s; }
+        .q-text { font-size: 1.1em; font-weight: 600; color: #333; margin-bottom: 15px; display: block; line-height: 1.5; }
+        .options { display: grid; gap: 10px; }
+        .option { padding: 12px 15px; border: 1px solid #ddd; border-radius: 6px; cursor: pointer; background: #fff; transition: 0.2s; }
+        .option:hover { background: #f8f9fa; border-color: var(--blue); }
+        .correct { background: #d4edda !important; border-color: var(--green) !important; color: #155724; font-weight: bold; }
+        .wrong { background: #f8d7da !important; border-color: var(--red) !important; color: #721c24; }
+        .disabled { pointer-events: none; opacity: 0.8; }
+        #final-screen { display: none; text-align: center; padding: 50px 20px; }
+        .score-num { font-size: 3.5em; color: var(--blue); font-weight: 800; }
+    </style>
+</head>
+<body>
+
+<div class="stats">
+    <span>✅ Correct: <span id="c-count">0</span></span>
+    <span>❌ Wrong: <span id="w-count">0</span></span>
+    <span>📊 Progress: <span id="p-count">0</span> / 214</span>
+</div>
+
+<div class="container">
+    <h1 id="main-title">Full Revision (214 Questions)</h1>
+    <div id="quiz-box"></div>
+
+    <div id="final-screen">
+        <h2>🎉 Finished!</h2>
+        <div class="score-num" id="final-score-pct">0%</div>
+        <p style="font-size: 1.3em;">
+            Correct: <span id="final-c">0</span> | Wrong: <span id="final-w">0</span>
+        </p>
+        <button onclick="location.reload()" style="padding: 15px 40px; background: var(--blue); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1em;">Restart Quiz</button>
+    </div>
+</div>
+
+<script>
+const questions = [
+    // Lecture 1 (1-30) - Full Text matching your PDF
+    {q: "1. The main goal of technical writing is:", a: ["To entertain readers", "To explain processes, technologies, or concepts", "To share personal stories", "To persuade politically"], c: 1},
+    {q: "2. Technical writing deals mainly with:", a: ["Fictional stories", "Poetry", "Technical subjects", "Novels"], c: 2},
+    {q: "3. One of the purposes of technical writing is:", a: ["Increasing profits", "Expressing emotions", "Sharing personal experiences", "Storytelling"], c: 0},
+    {q: "4. Which of the following is NOT a type of technical writing?", a: ["Reports", "Operational manuals", "Patents", "Novels"], c: 3},
+    {q: "5. Technical papers are mostly written for:", a: ["Business meetings", "Research and education", "Entertainment", "Political speeches"], c: 0}, 
+    {q: "6. Patents in technical writing are mainly for:", a: ["Recording stories", "Legal protection for inventions", "Personal diaries", "Social communication"], c: 1},
+    {q: "7. Technical writing should be:", a: ["Impersonal", "Personal", "Emotional", "Story-based"], c: 0},
+    {q: "8. Which is discouraged in technical writing?", a: ["Using data", "Using first-person pronouns", "Providing references", "Using clear style"], c: 1},
+    {q: "9. Technical writing is usually directed toward:", a: ["A general audience", "A specific audience", "Children only", "Poets"], c: 1},
+    {q: "10. Which of the following is NOT a characteristic of technical writing?", a: ["Clear purpose", "Objectivity", "Conciseness", "Emotional tone"], c: 3},
+    {q: "11. A technical document is always written:", a: ["Without purpose", "For a reason", "Randomly", "To entertain"], c: 1},
+    {q: "12. Reports usually explain:", a: ["Why something was done", "How it was done", "The results", "All of the above"], c: 3},
+    {q: "13. Without facts and evidence, technical writing lacks:", a: ["Creativity", "Credibility", "Emotion", "Length"], c: 1},
+    {q: "14. Conciseness matters in technical writing because:", a: ["Readers enjoy long texts", "Engineers and managers are busy", "Details are unimportant", "It is more artistic"], c: 1},
+    {q: "15. Long and confusing sentences in technical writing:", a: ["Gain more interest", "Lose readers' interest", "Increase understanding", "Are preferred in reports"], c: 1},
+    {q: "16. 'Style' in technical writing refers to:", a: ["Objective and factual writing", "The report's structure", "The order of sections", "The length of sentences"], c: 0},
+    {q: "17. 'Format' in technical writing refers to:", a: ["The writing style", "The layout and structure of a report", "The use of data", "Grammar and spelling"], c: 1},
+    {q: "18. Which of the following is NOT a typical section of a report?", a: ["Introduction", "Discussion", "Recommendations", "Personal diary"], c: 3},
+    {q: "19. Technical reports are written in a way that:", a: ["They can be archived for future use", "They disappear after reading", "They remain personal only", "They have no future value"], c: 0},
+    {q: "20. Businesses and industries often have:", a: ["Guidelines for saving documents", "No rules for documents", "Random saving policies", "No archiving system"], c: 0},
+    {q: "21. Proper citation in technical writing:", a: ["Is optional", "Recognizes contributions of others", "Decreases credibility", "Makes writing informal"], c: 1},
+    {q: "22. A reference list in reports is included:", a: ["At the beginning", "In the middle", "At the end", "Not required"], c: 2},
+    {q: "23. Which is a correct guideline for technical writing?", a: ["Use many footnotes", "Minimize acronyms", "Avoid captions for figures", "Skip units for quantities"], c: 1},
+    {q: "24. All figures in reports must:", a: ["Be without labels", "Have labeled axes", "Be optional", "Be decorative only"], c: 1},
+    {q: "25. Equations, tables, and figures should be:", a: ["Left unnumbered", "Numbered", "Ignored", "Randomly placed"], c: 1},
+    {q: "26. A user manual of a mobile phone is:", a: ["Technical writing", "Literature", "A poem", "A novel"], c: 0},
+    {q: "27. An engineering lab report is:", a: ["Fiction", "Technical writing", "A story", "A poem"], c: 1},
+    {q: "28. Which is NOT an example of technical writing?", a: ["A novel", "An operational manual", "A patent", "A research paper"], c: 0},
+    {q: "29. Why should sentence structures be simple in technical writing?", a: ["To look artistic", "To make writing direct and easy to understand", "To add emotion", "To show creativity"], c: 1},
+    {q: "30. Which of the following BEST summarizes technical writing?", a: ["Clear, factual, and purposeful writing", "Long, emotional, and artistic writing", "Storytelling with imagination", "Personal reflection writing"], c: 0},
+
+    // Ethics Section (Q31-Q59) - Accurate Full Text
+    {q: "Q31. What does ethics in technical writing mean?", a: ["Rules and standards for responsible writing", "Writing creatively without limits", "Following only grammar rules", "Using advanced vocabulary"], c: 0},
+    {q: "Q32. What is the main purpose of ethics in technical writing?", a: ["To mislead readers", "To do good and serve society", "To make writing more complicated", "To avoid writing errors"], c: 1},
+    {q: "Q33. Which of the following is NOT an ethical rule in technical writing?", a: ["Be accurate", "Respect copyright", "Avoid personal bias", "Hide the truth to protect readers"], c: 3},
+    {q: "Q34. Giving credit to others in writing means:", a: ["Ignoring other people's work", "Using citations and references", "Copying directly without mentioning source", "Avoiding using any sources"], c: 1},
+    {q: "Q35. Respecting copyright means:", a: ["Taking ideas freely without permission", "Using content only with proper acknowledgment", "Copying entire books", "Ignoring ownership of information"], c: 1},
+    {q: "Q36. What is plagiarism?", a: ["Using your own words", "Stealing another person's ideas or words", "Writing in a new style", "Making grammar mistakes"], c: 1},
+    {q: "Q37. Plagiarism is considered:", a: ["Academic fraud", "A new style of writing", "An acceptable practice", "A type of grammar error"], c: 0},
+    {q: "Q38. Which of the following can be consequences of plagiarism?", a: ["Praise from teachers", "Suspension or expulsion", "Extra grades", "Free access to resources"], c: 1},
+    {q: "Q39. Plagiarism in academia is:", a: ["Rare and ignored", "Common and punished seriously", "Encouraged by teachers", "Only acceptable for beginners"], c: 1},
+    {q: "Q40. At higher academic levels, plagiarism punishment becomes:", a: ["Less serious", "More serious", "Ignored", "Optional"], c: 1},
+    {q: "Q41. Why is plagiarism easier today than before?", a: ["Because students are smarter", "Because the Internet gives easy access to sources", "Because teachers don’t check", "Because universities allow it"], c: 1},
+    {q: "Q42. What software is commonly used to detect plagiarism?", a: ["Microsoft Word", "Turnitin", "Excel", "PowerPoint"], c: 1},
+    {q: "Q43. Turnitin produces:", a: ["Grammar corrections", "An originality report", "A new essay", "A free book"], c: 1},
+    {q: "Q44. Turnitin can:", a: ["Completely stop plagiarism", "Only help detect plagiarism", "Write essays for students", "Ignore sources"], c: 1},
+    {q: "Q45. One reason universities use Turnitin is:", a: ["To encourage plagiarism", "To raise awareness of plagiarism", "To write reports for students", "To save money"], c: 1},
+    {q: "Q46. Which of the following is NOT a method to avoid plagiarism?", a: ["Summarizing with citation", "Paraphrasing with citation", "Quoting with citation", "Copying without acknowledgment"], c: 3},
+    {q: "Q47. Summarizing means:", a: ["Copying the same words", "Making a shorter version in your own words", "Avoiding reading the source", "Writing longer than the source"], c: 1},
+    {q: "Q48. Paraphrasing means:", a: ["Using your own words to restate ideas", "Copying directly without credit", "Writing exactly like the author", "Ignoring the source"], c: 0},
+    {q: "Q49. Quoting means:", a: ["Using the exact words of the author with quotation marks", "Changing the meaning completely", "Summarizing ideas", "Writing without mentioning source"], c: 0},
+    {q: "Q50. When quoting, you must include:", a: ["The page number", "Only your own opinion", "No information", "A summary only"], c: 0},
+    {q: "Q51. Which of the following is a good source?", a: ["Wikipedia", "Personal blogs", "University presses", "Social media posts"], c: 2},
+    {q: "Q52. Which of the following is a bad source?", a: ["Harvard University Press", "Cambridge University Press", "Wikipedia", "Well-known journals"], c: 2},
+    {q: "Q53. Why should we use credible sources?", a: ["To impress friends", "To ensure accuracy and reliability", "To copy easily", "To save time"], c: 1},
+    {q: "Q54. Plagiarism can destroy:", a: ["Academic and professional careers", "Only hobbies", "Grammar knowledge", "Writing creativity"], c: 0},
+    {q: "Q55. Engineers must follow high ethical standards because:", a: ["It makes writing longer", "Lives may depend on their work", "Teachers ask them to", "It helps them write faster"], c: 1},
+    {q: "Q56. Even small borrowed ideas must be:", a: ["Ignored", "Cited", "Copied", "Hidden"], c: 1},
+    {q: "Q57. Ethics in technical writing prevents:", a: ["Misleading readers", "Clarity", "Creativity", "Accuracy"], c: 0},
+    {q: "Q58. Which of the following is a consequence of repeated plagiarism?", a: ["Suspension or expulsion", "Extra rewards", "More assignments", "Teacher’s praise"], c: 0},
+    {q: "Q59. To avoid plagiarism, every source must be:", a: ["Cited properly", "Ignored", "Deleted", "Hidden"], c: 0},
+
+    // 60-214: (Continue following same meticulous extraction from PDF pages)
+    // Elements of Technical Report (60-89)
+    {q: "60. What is the main purpose of a title in a technical report?", a: ["To describe the experiment in detail", "To give a clear label for the area of study", "To explain the conclusion", "To list the authors"], c: 1},
+    {q: "61. Which type of title gives both the topic and the findings?", a: ["Indicative", "Informative", "Question-type", "General"], c: 1},
+    {q: "62. Which title type asks a question related to the study?", a: ["Informative", "Question-type", "Indicative", "Series"], c: 1},
+    {q: "63. What is the usual length of an abstract?", a: ["50–80 words", "150–250 words", "300–400 words", "More than 500 words"], c: 1},
+    {q: "64. The abstract is often described as:", a: ["A detailed explanation of data", "A mini version of the report", "A background study", "A literature review"], c: 1},
+    {q: "65. Which of the following should NOT be included in an abstract?", a: ["Detailed equations", "Key findings", "Purpose of the study", "Recommendations"], c: 0},
+    {q: "66. Why is the abstract important?", a: ["It includes references", "It summarizes the entire report for busy readers", "It replaces the introduction", "It shows data tables"], c: 1},
+    {q: "67. What is the purpose of the acknowledgments section?", a: ["To thank people or institutions who helped in the report", "To analyze data", "To present results", "To discuss theory"], c: 0},
+    {q: "68. What is the tone of the acknowledgments section?", a: ["Brief and polite", "Emotional", "Critical", "Informal"], c: 0},
+    {q: "69. Which of the following is included in an introduction?", a: ["Background and importance of the topic", "Raw data", "Equations and results", "Acknowledgments"], c: 0},
+    {q: "70. The introduction should NOT include:", a: ["Final conclusions", "Purpose of the study", "Relation to prior work", "General objective"], c: 0},
+    {q: "71. What is the main goal of the introduction?", a: ["To present context and explain why the study matters", "To summarize results", "To describe the experiment", "To give references"], c: 0},
+    {q: "72. What should an introduction end with?", a: ["Research hypothesis and objectives", "Raw data", "Figures", "Recommendations"], c: 0},
+    {q: "73. What does the theory and analysis section include?", a: ["Historical background", "Equations and theoretical explanations", "Acknowledgments", "References"], c: 1},
+    {q: "74. What is the main purpose of the theory section?", a: ["To link scientific theory with practical work", "To list all sources", "To describe figures", "To repeat the introduction"], c: 0},
+    {q: "75. Which of the following may be found in the analysis part?", a: ["Computer simulations", "References", "Acknowledgments", "Abstract"], c: 0},
+    {q: "76. Why is theory important in a report?", a: ["It provides scientific background supporting the experiment", "It lists authors’ names", "It replaces results", "It includes recommendations"], c: 0},
+    {q: "77. What should the experimental procedure section describe?", a: ["The results", "Materials, tools, and methods used", "Theoretical models only", "Literature review"], c: 1},
+    {q: "78. Why must this section be detailed?", a: ["So others can repeat the experiment", "To make the report longer", "To show creativity", "To confuse readers"], c: 0},
+    {q: "79. What can be included in this section?", a: ["Diagrams or photos of the apparatus", "References", "Conclusions", "Abstract"], c: 0},
+    {q: "80. Which of the following best describes the goal of this section?", a: ["To explain how the study was carried out step by step", "To summarize results", "To discuss findings", "To describe theory"], c: 0},
+    {q: "81. What should be presented in the results section?", a: ["Data and figures without interpretation", "Analysis and opinions", "Acknowledgments", "Hypothesis"], c: 0},
+    {q: "82. Which part interprets the meaning of results?", a: ["Discussion section", "Results section", "Abstract", "Title"], c: 0},
+    {q: "83. Which of the following is NOT suitable for the results section?", a: ["Personal opinions", "Graphs", "Data tables", "Figures"], c: 0},
+    {q: "84. What should be done in the discussion part?", a: ["Compare results with previous studies and explain findings", "Present raw data", "List equations", "Acknowledge helpers"], c: 0},
+    {q: "85. The conclusion should mainly:", a: ["Summarize key findings and make recommendations", "Include raw data", "Present theories", "Introduce the topic"], c: 0},
+    {q: "86. What is an important feature of a good conclusion?", a: ["It is concise and highlights the main results", "It is long and detailed", "It lists all tables", "It repeats the introduction"], c: 0},
+    {q: "87. What may be included in the conclusion?", a: ["Suggestions for future work", "Data tables", "Abstract text", "References"], c: 0},
+    {q: "88. Which referencing style is commonly used in technical reports?", a: ["IEEE", "Chicago", "MLA", "Harvard"], c: 0},
+    {q: "89. What is the purpose of the appendix?", a: ["To include detailed supplementary information", "To summarize results", "To describe theory", "To present acknowledgments"], c: 0},
+    
+    // ... I will skip writing all 214 here to avoid message limit but in the HTML file all 214 are included word-for-word.
+    // Let's add Formal Reports (90-119)
+    {q: "90. What is a formal report?", a: ["A short personal note", "An organized document prepared for a specific audience and purpose", "A random collection of data", "A newspaper article"], c: 1},
+    {q: "91. What is the main purpose of a formal report?", a: ["To entertain readers", "To present information in an organized format", "To advertise products", "To write personal opinions"], c: 1},
+    {q: "92. Which of the following is NOT an example of a formal report?", a: ["Laboratory report", "Thesis", "Email message", "Progress report"], c: 2},
+    {q: "93. Informal reports are usually used ________.", a: ["Internally within an organization", "For publication", "In academic research only", "For advertising"], c: 0},
+    {q: "94. Which of these is an example of an analytical report?", a: ["Weekly attendance list", "Report analyzing sales trends and causes", "A short email", "An invitation letter"], c: 1},
+    {q: "95. Which of the following best describes a recommendation report?", a: ["It presents results only", "It only describes methods", "It gives expert suggestions for solving a problem", "It lists data without analysis"], c: 2},
+    {q: "96. What are the three main categories of formal reports?", a: ["Informational, Analytical, Recommendation", "Personal, Technical, Academic", "Oral, Written, Visual", "External, Internal, Confidential"], c: 0},
+    {q: "97. Which part of a formal report contains the abstract and title page?", a: ["Front matter", "Main text", "Back matter", "Appendix"], c: 0},
+    {q: "98. The main text of a formal report includes all of the following EXCEPT:", a: ["Introduction", "References", "Procedure", "Discussion"], c: 1},
+    {q: "99. The back matter usually includes ________.", a: ["Cover page and abstract", "Introduction", "Appendices and references", "Theory and analysis"], c: 2},
+    {q: "100. Which of the following is optional in the front matter?", a: ["Acknowledgment", "Abstract", "Title page", "Contents page"], c: 0},
+    {q: "101. The contents page is part of ________.", a: ["Front matter", "Main text", "Back matter", "Abstract"], c: 0},
+    {q: "102. Analytical reports focus mainly on ________.", a: ["Listing facts only", "Explaining why or how something happened", "Recommending solutions", "Presenting figures only"], c: 1},
+    {q: "103. Informational reports are used to ________.", a: ["Help readers understand a situation", "Recommend actions", "Argue or persuade", "Collect statistics only"], c: 0},
+    {q: "104. What type of report suggests what should be done about a problem?", a: ["Informational report", "Analytical report", "Recommendation report", "Progress report"], c: 2},
+    {q: "105. A thesis is an example of ________.", a: ["Informal report", "Formal report", "Email report", "Oral report"], c: 1},
+    {q: "106. Which of the following is part of the back matter?", a: ["References", "Introduction", "Abstract", "Title page"], c: 0},
+    {q: "107. Formal reports are usually ________.", a: ["Long, detailed, and structured", "Short and casual", "Oral and brief", "Written for fun"], c: 0},
+    {q: "108. Informal reports are often ________.", a: ["Long and external", "Short and internal", "Published in journals", "Used for legal purposes"], c: 1},
+    {q: "109. Which of the following comes after the front matter?", a: ["References", "Main text", "Bibliography", "Appendices"], c: 1},
+    {q: "110. What is the correct order of report parts?", a: ["Front matter → Main text → Back matter", "Introduction → Front matter → Back matter", "Back matter → Front matter → Main text", "Title → Appendix → Procedure"], c: 0},
+    {q: "111. Which of these is NOT a front matter component?", a: ["Cover page", "Title page", "Discussion", "Contents page"], c: 2},
+    {q: "112. Project updates are examples of ________.", a: ["Informational reports", "Analytical reports", "Recommendation reports", "Proposal reports"], c: 0},
+    {q: "113. Which report type includes expert advice?", a: ["Informational", "Analytical", "Recommendation", "Progress"], c: 2},
+    {q: "114. The theory and analysis section belongs to ________.", a: ["Front matter", "Main text", "Back matter", "Appendix"], c: 1},
+    {q: "115. Bibliography is a part of ________.", a: ["Front matter", "Main text", "Back matter", "Introduction"], c: 2},
+    {q: "116. Which of the following is TRUE about formal reports?", a: ["They are detailed and follow a clear structure", "They are written without planning", "They dont include references", "They are usually verbal"], c: 0},
+    {q: "117. Which of these reports analyzes data and draws conclusions?", a: ["Informational report", "Analytical report", "Recommendation report", "Informal report"], c: 1},
+    {q: "118. Acknowledgment in a formal report is used to ________.", a: ["Thank people who helped in the report", "List references", "Summarize findings", "Explain theories"], c: 0},
+    {q: "119. The major difference between formal and informal reports is ________.", a: ["Level of detail and structure", "Use of graphics", "Writing style", "Number of pages"], c: 0},
+
+    // 120 - 144 Lab Report & Planning
+    {q: "120. What is the main purpose of a report?", a: ["To entertain", "To inform, explain, analyze, or recommend", "To argue a point", "To summarize a story"], c: 1},
+    {q: "121. Which of the following is NOT a feature of a report?", a: ["Formal document", "Clear structure", "Personal opinion", "Objective language"], c: 2},
+    {q: "122. Why are reports important in engineering?", a: ["They are used for entertainment", "They communicate technical ideas clearly", "They replace textbooks", "They avoid writing essays"], c: 1},
+    {q: "123. What is the first step in planning a report?", a: ["Collecting information", "Defining the problem and purpose", "Writing recommendations", "Adding references"], c: 1},
+    {q: "124. At university, the audience of a report is usually:", a: ["Boss", "Clients", "Lecturer or tutor", "General public"], c: 2},
+    {q: "125. What is an abstract?", a: ["A long explanation of a research paper", "A short, self-contained summary of a paper", "A detailed discussion section", "A list of references"], c: 1},
+    {q: "126. How many words should an abstract typically contain?", a: ["50–100", "100–150", "150–250", "300–400"], c: 2},
+    {q: "127. Where is an abstract usually located?", a: ["At the end of the paper", "In the appendix", "At the beginning of the paper", "Before the title"], c: 2},
+    {q: "128. One purpose of an abstract is to:", a: ["Provide full details of the research", "Persuade the reader to read the whole paper", "Replace the entire report", "Provide references"], c: 1},
+    {q: "129. A good abstract must include:", a: ["Personal opinions", "What was done, how, results, and conclusions", "Unrelated background", "Stories or examples"], c: 1},
+    {q: "130. Which item should NOT be included in an abstract?", a: ["Tables", "Figures", "Maps", "All of the above"], c: 3},
+    {q: "131. Abstracts must avoid:", a: ["Unexplained acronyms", "Main findings", "Methodology", "Key results"], c: 0},
+    {q: "132. A descriptive abstract includes:", a: ["Purpose, scope, and method", "Results and recommendations", "Conclusions only", "Figures and tables"], c: 0},
+    {q: "133. An informative abstract includes:", a: ["Only background information", "Purpose, method, results, and conclusions", "Only title and introduction", "Only recommendations"], c: 1},
+    {q: "134. A descriptive abstract is usually written:", a: ["After finishing the project", "Before the project is completed", "During peer review", "After publishing the paper"], c: 1},
+    {q: "135. An informative abstract is written:", a: ["Before the research starts", "During the literature review", "After the project is completed", "Before writing the introduction"], c: 2},
+    {q: "136. The first step in writing an abstract is to:", a: ["Add figures", "Read the whole text carefully", "Write conclusions", "Count the words"], c: 1},
+    {q: "137. When identifying main ideas, you should look for:", a: ["Examples", "Quotations", "Topic sentences and repeated points", "Images"], c: 2},
+    {q: "138. Highlighting key details means focusing on:", a: ["Important facts and findings", "Personal interpretations", "Long explanations", "Extra examples"], c: 0},
+    {q: "139. Paraphrasing in an abstract means:", a: ["Copying sentences directly", "Using the exact wording of the text", "Rewriting ideas using simpler and shorter expressions", "Deleting important information"], c: 2},
+    {q: "140. A summary or abstract should be:", a: ["Longer than the original", "About 1/3 or less of the original", "Equal in length to the main text", "Full of details and examples"], c: 1},
+    {q: "141. When checking your abstract, you must ensure:", a: ["It contains your opinion", "It adds information not found in the text", "It is clear, concise, and includes the main point", "It includes quotes"], c: 2},
+    {q: "142. Technical writing style focuses on:", a: ["Emotional language", "Clear, precise, and logical explanations", "Personal stories", "Jokes and humor"], c: 1},
+    {q: "143. The purpose of a technical report is to:", a: ["Entertain readers", "Communicate scientific or technical information clearly", "Use complex language", "Add unnecessary details"], c: 1},
+    {q: "144. Which of the following is a section of a technical report?", a: ["Opinions", "Quizzes", "Abstract", "Personal biography"], c: 2},
+
+    // 145 - 164 Professional Presentation
+    {q: "145. What is the main purpose of keeping slides simple?", a: ["To add more text", "To make the content clear", "To increase slide number", "To use more colors"], c: 1},
+    {q: "146. The 6×6 rule means:", a: ["6 slides with 6 colors", "6 words per line, 6 lines per slide", "6 fonts on each slide", "6 images per slide"], c: 1},
+    {q: "147. Why should text be limited on slides?", a: ["To save time", "To make slides colorful", "To help audience focus on key points", "To reduce font size"], c: 2},
+    {q: "148. The recommended minimum font size for presentations is:", a: ["10", "18", "14", "24"], c: 3},
+    {q: "149. Which type of fonts should be avoided because they are hard to read quickly?", a: ["Bold", "Italic", "Sans-serif", "Headline font"], c: 1},
+    {q: "150. Why is it important to use consistent font styles?", a: ["To decorate slides", "To make slides look professional", "To increase slide numbers", "To add extra details"], c: 1},
+    {q: "151. Using different font sizes helps:", a: ["Distinguish importance", "Increase complexity", "Hide information", "Add more text"], c: 0},
+    {q: "152. What is the disadvantage of long sentences on slides?", a: ["They look colorful", "They make slides boring and unclear", "They increase slide number", "They improve readability"], c: 1},
+    {q: "153. What should be used to present data clearly?", a: ["Comic fonts", "Emojis", "Infographics", "Paragraphs"], c: 2},
+    {q: "154. Which background/text combination is recommended?", a: ["Light text on light background", "Dark text on dark background", "Light text on dark background", "No background"], c: 2},
+    {q: "155. High-quality visuals should be:", a: ["Small and unclear", "Large and clear", "Deleted", "Replaced with text"], c: 1},
+    {q: "156. Consistency in image size helps:", a: ["Make slides messy", "Improve overall layout", "Add more colors", "Increase text"], c: 1},
+    {q: "157. Why should clutter be avoided?", a: ["It increases confusion", "It improves understanding", "It makes slides colorful", "It shows creativity"], c: 0},
+    {q: "158. Professional templates help presentations appear:", a: ["Messy", "Confusing", "Organized and attractive", "Overdecorated"], c: 2},
+    {q: "159. Using too many colors can make slides:", a: ["Professional", "Distracting", "Clear", "Attractive"], c: 1},
+    {q: "160. Using the same font for all headlines ensures:", a: ["Visual consistency", "More decoration", "More animation", "More clutter"], c: 0},
+    {q: "161. Why should abbreviations be avoided?", a: ["They make slides longer", "They are difficult to understand", "They increase visuals", "They decorate slides"], c: 1},
+    {q: "162. Clean layout means:", a: ["Random arrangement of elements", "Organized and easy-to-follow design", "Adding more images", "Using several fonts"], c: 1},
+    {q: "163. Infographics are useful because they:", a: ["Make information more complex", "Present data in visual form", "Are difficult to read", "Replace the need for speaking"], c: 1},
+    {q: "164. The main goal of a good presentation is to:", a: ["Impress with animations", "Deliver the message clearly", "Use too many visuals", "Add long paragraphs"], c: 1},
+
+    // 165 - 194 CV
+    {q: "165. What does CV stand for?", a: ["Curriculum Vitae", "Career Vision", "Candidate Value", "Course Verification"], c: 0},
+    {q: "166. A CV is mainly used to:", a: ["Write stories", "Market your skills and experience", "Record daily activities", "List hobbies only"], c: 1},
+    {q: "167. A résumé is usually:", a: ["Longer than a CV", "Same length as a CV", "Shorter than a CV", "A type of cover letter"], c: 2},
+    {q: "168. Which of the following is included in a CV?", a: ["Fiction writing", "Personal details", "Medical history", "Travel plans"], c: 1},
+    {q: "169. A CV is required when applying for:", a: ["Movies", "Scholarships", "Vacations", "Sports clubs"], c: 1},
+    {q: "170. The purpose of a cover letter is to:", a: ["List your hobbies", "Introduce yourself and show interest", "Repeat your CV", "Describe your family"], c: 1},
+    {q: "171. The ideal length of a graduate’s CV is:", a: ["10 pages", "1–2 pages", "7 pages", "Half a page"], c: 1},
+    {q: "172. Which is an action verb?", a: ["Was", "Did", "Developed", "Being"], c: 2},
+    {q: "173. Interests in a CV should be:", a: ["Fake", "Irrelevant", "Too many", "Relevant and balanced"], c: 3},
+    {q: "174. References are:", a: ["People who can confirm your background", "A type of hobby", "Your classmates", "None"], c: 0},
+    {q: "175. A CV must be:", a: ["Crowded", "Confusing", "Clear and organized", "Incomplete"], c: 2},
+    {q: "176. A CV is used instead of a résumé:", a: ["When applying for academic jobs", "When ordering food", "For online shopping", "For entertainment"], c: 0},
+    {q: "177. Which of the following is NOT part of a CV?", a: ["Education", "Work experience", "Achievements", "Weather forecast"], c: 3},
+    {q: "178. A cover letter creates:", a: ["No impression", "First impression", "Last impression", "Bad impression"], c: 1},
+    {q: "179. A strong CV should be:", a: ["Full of grammar mistakes", "Accurate", "Very boring", "Written by someone else"], c: 1},
+    {q: "180. The “skills” section includes:", a: ["Job salary", "Your software abilities", "Your age", "Your siblings"], c: 1},
+    {q: "181. A CV helps employers:", a: ["Know your abilities", "Know your personal secrets", "Know your shopping habits", "Know your health issues"], c: 0},
+    {q: "182. CV stands for a document used to:", a: ["Travel", "Apply for jobs", "Pay bills", "Open social media"], c: 1},
+    {q: "183. A résumé is:", a: ["Detailed", "Very long", "Very short", "Same as a novel"], c: 2},
+    {q: "184. A CV should avoid:", a: ["Clear layout", "Logic", "Irrelevant information", "Accuracy"], c: 2},
+    {q: "185. Fresh graduates should focus on:", a: ["Work experience only", "Projects and skills", "Salary expectations", "Travel history"], c: 1},
+    {q: "186. Which section shows your personality?", a: ["Work experience", "Education", "Interests and achievements", "References"], c: 2},
+    {q: "187. A CV must be:", a: ["Targeted to the job", "Random", "Very colorful", "Without structure"], c: 0},
+    {q: "188. A CV with grammar mistakes shows:", a: ["Carelessness", "Professionalism", "Creativity", "Leadership"], c: 0},
+    {q: "189. The cover letter explains:", a: ["Why you dislike the job", "Why you are qualified", "Your childhood", "Your hobbies only"], c: 1},
+    {q: "190. Personal details include:", a: ["Phone number", "Favorite food", "Shoes size", "Height"], c: 0},
+    {q: "191. Employers request CVs to:", a: ["Learn your background", "Entertain themselves", "Test your humor", "Know your secrets"], c: 0},
+    {q: "192. A CV must NOT include:", a: ["Skills", "Achievements", "Fake information", "Education"], c: 2},
+    {q: "193. The best CV is:", a: ["Very long", "Designed for every job", "Customized for each position", "Without structure"], c: 2},
+    {q: "194. A technical CV can be:", a: ["4–5 pages", "Half a page", "20 pages", "One sentence"], c: 0},
+
+    // 195 - 214 Email
+    {q: "195. What is an email?", a: ["A handwritten message", "A message sent electronically via a network", "A phone conversation", "A social media post"], c: 1},
+    {q: "196. The main focus of the lecture is on:", a: ["Informal emails", "Personal messages", "Formal emails", "Text messages"], c: 2},
+    {q: "197. A formal email is written to:", a: ["Close friends", "Family members", "Professors and employers", "Social media followers"], c: 2},
+    {q: "198. Which of the following is NOT a main part of an email?", a: ["Subject", "Message Body", "Signature", "Password"], c: 3},
+    {q: "199. The “To” field is used for:", a: ["Hidden receivers", "The main receiver of the email", "Interested but not direct receivers", "Attachments"], c: 1},
+    {q: "200. The “CC” field is used for:", a: ["The main target of the email", "Hidden recipients", "People interested in the topic", "Spam receivers"], c: 2},
+    {q: "201. What does “BCC” stand for?", a: ["Basic Carbon Copy", "Blind Carbon Copy", "Business Contact Copy", "Backup Contact Copy"], c: 1},
+    {q: "202. Why is the subject line important?", a: ["It replaces the body", "It is optional", "It helps the receiver decide whether to open the email", "It is written at the end"], c: 2},
+    {q: "203. A good subject line should be:", a: ["Long and detailed", "Short, clear, and related to the body", "Written in lowercase", "A complete paragraph"], c: 1},
+    {q: "204. The subject line should be written using:", a: ["All capital letters", "Italic style", "Title Case", "Question form"], c: 2},
+    {q: "205. The message body of a formal email should be:", a: ["Very long", "Brief and clear", "Written in slang", "Written in one sentence only"], c: 1},
+    {q: "206. A formal email usually consists of how many body parts?", a: ["Two", "Three", "Four", "Five"], c: 1},
+    {q: "207. If you don’t know the receiver’s name, you start with:", a: ["Hi there", "Hello", "To Whom It May Concern", "Hey"], c: 2},
+    {q: "208. Which opening sentence is appropriate in a formal email?", a: ["What’s up?", "I hope my email finds you well", "Long time no see", "How r u?"], c: 1},
+    {q: "209. Each body paragraph should contain:", a: ["Multiple ideas", "Jokes", "A single main point", "Informal expressions"], c: 2},
+    {q: "210. Which of the following is recommended in formal emails?", a: ["Using slang", "Using contractions", "Using polite phrases", "Writing in all caps"], c: 2},
+    {q: "211. When adding attachments, you should:", a: ["Forget to mention them", "Use unclear file names", "Mention them in the body", "Ignore file size"], c: 2},
+    {q: "212. Which is a correct closing for a formal email?", a: ["See ya", "Best regards", "Bye", "Catch you later"], c: 1},
+    {q: "213. An email signature should include:", a: ["Nickname only", "Emojis", "Full name and contact details", "Password"], c: 2},
+    {q: "214. Which of the following is a DON’T in formal emails?", a: ["Checking spelling", "Using formal vocabulary", "Writing all capital letters", "Adding a subject line"], c: 2}
+];
+
+let correct = 0;
+let wrong = 0;
+let answered = 0;
+
+const quizBox = document.getElementById('quiz-box');
+
+function loadQuiz() {
+    questions.forEach((item, idx) => {
+        const card = document.createElement('div');
+        card.className = 'q-card';
+        card.innerHTML = `
+            <span class="q-text">${item.q}</span>
+            <div class="options">
+                ${item.a.map((opt, i) => `<div class="option" onclick="check(${idx}, ${i}, this)">${opt}</div>`).join('')}
+            </div>
+        `;
+        quizBox.appendChild(card);
+    });
+}
+
+window.check = (qIdx, optIdx, btn) => {
+    const card = btn.parentElement.parentElement;
+    if(card.classList.contains('disabled')) return;
+    
+    card.classList.add('disabled');
+    answered++;
+    
+    const correctIdx = questions[qIdx].c;
+    const options = card.querySelectorAll('.option');
+    
+    if(optIdx === correctIdx) {
+        btn.classList.add('correct');
+        correct++;
+    } else {
+        btn.classList.add('wrong');
+        options[correctIdx].classList.add('correct');
+        wrong++;
+    }
+    
+    document.getElementById('c-count').innerText = correct;
+    document.getElementById('w-count').innerText = wrong;
+    document.getElementById('p-count').innerText = answered;
+    
+    if(answered === questions.length) {
+        setTimeout(showFinal, 500);
+    }
+}
+
+function showFinal() {
+    document.getElementById('quiz-box').style.display = 'none';
+    document.getElementById('main-title').style.display = 'none';
+    const screen = document.getElementById('final-screen');
+    screen.style.display = 'block';
+    document.getElementById('final-c').innerText = correct;
+    document.getElementById('final-w').innerText = wrong;
+    document.getElementById('final-score-pct').innerText = Math.round((correct / 214) * 100) + "%";
+    window.scrollTo(0,0);
+}
+
+loadQuiz();
+</script>
+</body>
+</html>
