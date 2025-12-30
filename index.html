@@ -22,26 +22,27 @@
         .score-big { font-size: 4em; color: var(--primary); font-weight: bold; }
         .btn { background: var(--primary); color: white; border: none; padding: 12px 30px; border-radius: 5px; cursor: pointer; font-size: 1em; margin-top: 20px; }
     </style>
+</he</style>
 </head>
 <body>
 
+<div class="stats">
+    <span>✅ Correct: <span id="c-count">0</span></span>
+    <span>❌ Wrong: <span id="w-count">0</span></span>
+    <span>📊 Progress: <span id="p-count">0</span> / 214</span>
+</div>
+
 <div class="container">
-    <div id="quiz-header">
-        <h1>Microsoft Office Quiz (Word & PPT)</h1>
-        <div class="stats">
-            <span>Correct: <span id="c-count" style="color:var(--success)">0</span></span>
-            <span>Wrong: <span id="w-count" style="color:var(--danger)">0</span></span>
-            <span>Question: <span id="p-count">1</span> / 63</span>
-        </div>
-    </div>
+    <h1 id="main-title">Full Revision (214 Questions)</h1>
+    <div id="quiz-box"></div>
 
-    <div id="quiz-area"></div>
-
-    <div id="result-screen">
-        <h2>Exam Completed!</h2>
-        <div class="score-big" id="final-score">0%</div>
-        <p>You answered <span id="final-c">0</span> out of 63 questions correctly.</p>
-        <button class="btn" onclick="location.reload()">Restart Quiz</button>
+    <div id="final-screen">
+        <h2>🎉 Finished!</h2>
+        <div class="score-num" id="final-score-pct">0%</div>
+        <p style="font-size: 1.3em;">
+            Correct: <span id="final-c">0</span> | Wrong: <span id="final-w">0</span>
+        </p>
+        <button onclick="location.reload()" style="padding: 15px 40px; background: var(--blue); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1em;">Restart Quiz</button>
     </div>
 </div>
 
@@ -156,3 +157,4 @@ loadAll();
 </script>
 </body>
 </html>
+
