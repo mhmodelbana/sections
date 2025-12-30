@@ -3,37 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Word & PPT Quiz</title>
+    <title>Office Full Revision</title>
     <style>
-        :root { --primary: #2b5797; --success: #28a745; --danger: #dc3545; --bg: #f4f7f9; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        h1 { color: var(--primary); text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; }
-        .stats { display: flex; justify-content: space-between; margin-bottom: 20px; font-weight: bold; background: #e9ecef; padding: 10px; border-radius: 8px; }
-        .q-card { margin-bottom: 25px; padding: 15px; border: 1px solid #dee2e6; border-radius: 10px; transition: 0.3s; }
-        .q-text { font-size: 1.1em; font-weight: 600; display: block; margin-bottom: 12px; color: #333; }
-        .options { display: grid; gap: 10px; }
-        .option { padding: 12px; border: 1px solid #ced4da; border-radius: 6px; cursor: pointer; background: white; transition: 0.2s; }
-        .option:hover { background: #f8f9fa; border-color: var(--primary); }
-        .correct { background: #d4edda !important; border-color: var(--success) !important; color: #155724; font-weight: bold; }
-        .wrong { background: #f8d7da !important; border-color: var(--danger) !important; color: #721c24; }
-        .disabled { pointer-events: none; opacity: 0.7; }
-        #result-screen { display: none; text-align: center; padding: 40px; }
-        .score-big { font-size: 4em; color: var(--primary); font-weight: bold; }
-        .btn { background: var(--primary); color: white; border: none; padding: 12px 30px; border-radius: 5px; cursor: pointer; font-size: 1em; margin-top: 20px; }
+        :root { --blue: #1a73e8; --green: #28a745; --red: #dc3545; --bg: #f8f9fa; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 0; }
+        
+        /* البار العلوي كما طلبته */
+        .stats { 
+            display: flex; 
+            justify-content: space-around; 
+            background: white; 
+            padding: 15px; 
+            font-weight: bold; 
+            border-bottom: 2px solid #ddd; 
+            position: sticky; 
+            top: 0; 
+            z-index: 999; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .container { max-width: 800px; margin: 20px auto; padding: 0 15px; }
+        #main-title { text-align: center; color: var(--blue); margin-bottom: 30px; }
+        
+        .q-card { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-left: 5px solid #ccc; }
+        .q-text { font-size: 1.1em; font-weight: bold; margin-bottom: 15px; display: block; color: #333; line-height: 1.5; }
+        
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option { padding: 12px; border: 1px solid #ccc; border-radius: 8px; cursor: pointer; transition: 0.2s; background: #fff; }
+        .option:hover { background: #f1f3f4; border-color: var(--blue); }
+        
+        .correct { background: #d4edda !important; border-color: var(--green) !important; color: #155724; font-weight: bold; }
+        .wrong { background: #f8d7da !important; border-color: var(--red) !important; color: #721c24; }
+        .disabled { pointer-events: none; opacity: 0.8; }
+
+        #final-screen { 
+            display: none; 
+            text-align: center; 
+            padding: 50px; 
+            background: white; 
+            border-radius: 15px; 
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1); 
+        }
+        .score-num { font-size: 4em; color: var(--blue); font-weight: 900; margin: 20px 0; }
     </style>
-</he</style>
 </head>
 <body>
 
 <div class="stats">
     <span>✅ Correct: <span id="c-count">0</span></span>
     <span>❌ Wrong: <span id="w-count">0</span></span>
-    <span>📊 Progress: <span id="p-count">0</span> / 214</span>
+    <span>📊 Progress: <span id="p-count">0</span> / <span id="total-count">0</span></span>
 </div>
 
 <div class="container">
-    <h1 id="main-title">Full Revision (214 Questions)</h1>
+    <h1 id="main-title">Full Revision (63 Questions)</h1>
     <div id="quiz-box"></div>
 
     <div id="final-screen">
@@ -48,113 +71,121 @@
 
 <script>
 const questions = [
-    // --- File: question bank sections.pdf (Word) ---
-    {q: "1. In formal reports, the figure caption ________ be added and is located ________ the figure.", a: ["may, above", "must, above", "may, under", "must, under"], c: 3},
-    {q: "2. In formal reports, the table caption ________ be added and is located ________ the table.", a: ["may, above", "must, above", "may, under", "must, under"], c: 1},
-    {q: "3. You can convert the text to WordArt.", a: ["True", "False"], c: 0},
-    {q: "4. Tabs are organized according to:", a: ["Recent use", "Frequent use", "Names", "Functions"], c: 3},
-    {q: "5. Insert illustrations include:", a: ["Shapes", "Painter", "Tables", "Pages"], c: 0},
-    {q: "6. You can change the font formatting using the tab:", a: ["Home", "Insert", "View", "Review"], c: 0},
-    {q: "7. Arrows are considered ________ in the document.", a: ["SmartArts", "Designs", "Charts", "Shapes"], c: 3},
-    {q: "8. ________ are always inserted at the beginning of the document.", a: ["Cover pages", "Design Pages", "Page breaks", "Page Setup"], c: 0},
-    {q: "9. You can split your word page into 2 columns or more through:", a: ["Design tab", "Layout tab", "Reference tab", "View tab"], c: 1},
-    {q: "10. You can draw tables or Excel spreadsheets or add preset table at the design menu.", a: ["True", "False"], c: 1},
-    {q: "11. You can insert Excel spreadsheet from:", a: ["Insert tab", "Home tab", "Layout tab", "Draw tab"], c: 0},
-    {q: "12. Character that appears little below the normal text is called:", a: ["Subscript", "Superscript", "Heading", "All Caps"], c: 0},
-    {q: "13. To write a paragraph, press the 'SPACE' key to move from one line to another.", a: ["True", "False"], c: 1},
-    {q: "14. The process of removing unwanted part of an image is called:", a: ["Cropping", "Cutting", "Heading", "Inserting"], c: 0},
-    {q: "15. The Mini Toolbar in Word is used for:", a: ["Opening hidden menus", "Quickly accessing font formatting tools", "Inserting images", "Adjusting print settings"], c: 1},
-    {q: "16. The Format Painter tool is used to:", a: ["Copy text", "Paste images", "Copy formatting from one text to another", "Remove formatting"], c: 2},
-    {q: "17. To change text color in Word, go to:", a: ["Insert -> Shapes", "Home -> Font area -> Color", "View -> Page Color", "Layout -> Theme"], c: 1},
-    {q: "18. How many Text Wrapping options are available for images?", a: ["4", "5", "6", "7"], c: 3},
-    {q: "19. The option 'Inline with Text' for images means the image:", a: ["Is behind the text", "Is embedded within the text", "Is in front of the text", "Wraps around the text"], c: 1},
-    {q: "20. To insert a special symbol, use:", a: ["Insert -> Equation", "Insert -> Symbol", "View -> Icons", "Layout -> Special"], c: 1},
-    {q: "21. To edit an existing equation, you should:", a: ["Press Enter twice", "Double-click on the equation", "Right-click and choose Edit Text", "Press Ctrl + E"], c: 1},
-    {q: "22. The Highlight tool is used to:", a: ["Change font size", "Color the background of text for emphasis", "Add a text shadow", "Add page borders"], c: 1},
-    {q: "23. Microsoft Word can be used to design covers or posters because it allows:", a: ["Adding and formatting images and shapes", "Text only", "Writing code", "Creating spreadsheets"], c: 0},
-    {q: "24. The Picture Format tab appears when:", a: ["A table is selected", "A picture is selected", "A shape is inserted", "Text is highlighted"], c: 1},
-    {q: "25. To insert an equation from scratch, you should choose:", a: ["Insert -> New Equation", "Insert -> Symbol -> Drawing", "View -> Equation Builder", "Layout -> Formula"], c: 0},
-    {q: "26. To automatically adjust column widths based on the text inside, use:", a: ["Merge Cells", "AutoFit", "Align Text", "Table Style"], c: 1},
-    {q: "27. The Design Tab under Table Tools allows you to:", a: ["Insert new rows and columns", "Change color, borders, and font style", "Sort numerical data", "Create formulas"], c: 1},
-    {q: "28. Which of the following best describes the Ribbon?", a: ["A toolbar with various commands", "Feature that translates text", "Cable for printer", "Zoom slider"], c: 0},
-    {q: "29. In Microsoft Word, 'Calibri' is a:", a: ["Theme", "Username", "Font", "Color"], c: 2},
-    {q: "30. What is the quickest way to correct the same word error in several places?", a: ["Delete and start over", "Spelling and Grammar", "Find and Replace", "Insert SmartArt"], c: 2},
-    {q: "31. How do you save a document with a new name?", a: ["Click Format -> Save As", "Press Ctrl+S", "Type Ctrl+V", "Click the Save As button"], c: 3},
-    {q: "32. What is a bullet list in Word?", a: ["Highlighted with a bullet", "Numbered list", "Alphabetical list", "Centered list"], c: 0},
-    {q: "33. What is SmartArt?", a: ["Feature for charts", "Font style", "Tool for tables", "Set of predefined graphic layouts"], c: 3},
-    {q: "34. Which of the following best describes Microsoft Word?", a: ["Spreadsheet application", "Presentation tool", "Word processing program", "Database system"], c: 2},
-    {q: "35. You can change the font formatting using the tab:", a: ["Home", "Insert", "View", "Review"], c: 0},
-    {q: "36. Which feature allows users to insert tables, images, charts, and equations?", a: ["Home tab", "Insert tab", "Review tab", "Layout tab"], c: 1},
-    {q: "37. Which tab allows users to set page margins, orientation, and indentation?", a: ["Layout", "Insert", "View", "Draw"], c: 0},
+    // --- Microsoft Word (37 Questions) ---
+    {q: "In formal reports, the figure caption must be added and is located under the figure.", a: ["True", "False"], c: 0},
+    {q: "In formal reports, the table caption must be added and is located above the table.", a: ["True", "False"], c: 0},
+    {q: "You can convert the text to WordArt.", a: ["True", "False"], c: 0},
+    {q: "Tabs are organized according to:", a: ["Recent use", "Frequent use", "Names", "Functions"], c: 3},
+    {q: "Insert illustrations include:", a: ["Shapes", "Painter", "Tables", "Pages"], c: 0},
+    {q: "You can change the font formatting using the tab:", a: ["Home", "Insert", "View", "Review"], c: 0},
+    {q: "Arrows are considered ________ in the document.", a: ["SmartArts", "Designs", "Charts", "Shapes"], c: 3},
+    {q: "Which are always inserted at the beginning of the document?", a: ["Cover pages", "Design Pages", "Page breaks", "Page Setup"], c: 0},
+    {q: "You can split your word page into 2 columns or more through:", a: ["Design tab", "Layout tab", "Reference tab", "View tab"], c: 1},
+    {q: "You can draw tables or Excel spreadsheets or add preset table at the design menu.", a: ["True", "False"], c: 1},
+    {q: "You can insert Excel spreadsheet from:", a: ["Insert", "Home", "Layout", "Draw"], c: 0},
+    {q: "Character that appears little below the normal text is called:", a: ["Subscript", "Superscript", "Heading", "All Caps"], c: 0},
+    {q: "To write a paragraph, press the 'SPACE' key to move from one line to another.", a: ["True", "False"], c: 1},
+    {q: "The process of removing unwanted part of an image is called:", a: ["Cropping", "Cutting", "Heading", "Inserting"], c: 0},
+    {q: "The Mini Toolbar in Word is used for:", a: ["Opening hidden menus", "Quickly accessing font formatting tools", "Inserting images", "Adjusting print settings"], c: 1},
+    {q: "The Format Painter tool is used to:", a: ["Copy text", "Paste images", "Copy formatting from one text to another", "Remove formatting"], c: 2},
+    {q: "To change text color in Word, go to:", a: ["Insert -> Shapes", "Home -> Font area -> Color", "View -> Page Color", "Layout -> Theme"], c: 1},
+    {q: "How many Text Wrapping options are available for images?", a: ["4", "5", "6", "7"], c: 3},
+    {q: "The option 'Inline with Text' for images means the image is embedded within the text.", a: ["True", "False"], c: 0},
+    {q: "To insert a special symbol, use:", a: ["Insert -> Equation", "Insert -> Symbol", "View -> Icons", "Layout -> Special"], c: 1},
+    {q: "To edit an existing equation, you should:", a: ["Press Enter twice", "Double-click on the equation", "Right-click and choose Edit Text", "Press Ctrl + E"], c: 1},
+    {q: "The Highlight tool is used to:", a: ["Change font size", "Color the background of text for emphasis", "Add a text shadow", "Add page borders"], c: 1},
+    {q: "Microsoft Word can be used to design covers or posters because it allows adding and formatting images/shapes.", a: ["True", "False"], c: 0},
+    {q: "The Picture Format tab appears when a picture is selected.", a: ["True", "False"], c: 0},
+    {q: "To insert an equation from scratch, you should choose:", a: ["Insert -> New Equation", "Insert -> Symbol -> Drawing", "View -> Equation Builder", "Layout -> Formula"], c: 0},
+    {q: "To automatically adjust column widths based on the text inside, use:", a: ["Merge Cells", "AutoFit", "Align Text", "Table Style"], c: 1},
+    {q: "The Design Tab under Table Tools allows you to change color, borders, and style.", a: ["True", "False"], c: 0},
+    {q: "Which of the following best describes the Ribbon?", a: ["A toolbar with various commands", "Feature that translates text", "Cable for printer", "Zoom slider"], c: 0},
+    {q: "In Microsoft Word, 'Calibri' is a:", a: ["Theme", "Username", "Font", "Color"], c: 2},
+    {q: "What is the quickest way to correct the same word error in several places?", a: ["Delete and start over", "Spelling and Grammar", "Find and Replace", "Insert SmartArt"], c: 2},
+    {q: "How do you save a document with a new name?", a: ["Click Format -> Save As", "Press Ctrl+S", "Type Ctrl+V", "Click the Save As button"], c: 3},
+    {q: "What is a bullet list in Word?", a: ["Highlighted with a bullet", "Numbered list", "Alphabetical list", "Centered list"], c: 0},
+    {q: "What is SmartArt?", a: ["Feature for charts", "Font style", "Tool for tables", "Set of predefined graphic layouts"], c: 3},
+    {q: "Which of the following best describes Microsoft Word?", a: ["Spreadsheet application", "Presentation tool", "Word processing program", "Database system"], c: 2},
+    {q: "You can change the font formatting using the tab:", a: ["Home", "Insert", "View", "Review"], c: 0},
+    {q: "Which feature allows users to insert tables, images, charts, and equations?", a: ["Home tab", "Insert tab", "Review tab", "Layout tab"], c: 1},
+    {q: "Which tab allows users to set page margins, orientation, and indentation?", a: ["Layout", "Insert", "View", "Draw"], c: 0},
 
-    // --- File: REVISION SEC.pdf (PPT & Excel) ---
-    {q: "38. Where do you go to change slide size (Standard, Widescreen)?", a: ["Home -> Layout", "Design -> Slide Size", "Insert -> Shapes", "View -> Slide Master"], c: 1},
-    {q: "39. Which command lets you add a vector diagram (Process, Cycle, Hierarchy)?", a: ["SmartArt", "Shapes", "Chart", "Screenshot"], c: 0},
-    {q: "40. Which feature lets you change the theme's font, color, or effects for the whole presentation?", a: ["Variants in Design", "Transitions -> Effect", "Animations -> Painter", "Insert -> Text Box"], c: 0},
-    {q: "41. How do you apply the same transition effect to every slide quickly?", a: ["Right-click each slide", "Design -> Variants", "Transitions -> Apply To All", "Animations -> Apply All"], c: 2},
-    {q: "42. What is the primary purpose of the Animation Painter?", a: ["Preview animations", "Copy animations from one object to another", "Remove animations", "Set start time"], c: 1},
-    {q: "43. Which animation type is used to make an object appear on the slide?", a: ["Exit", "Motion Path", "Entrance", "Emphasis"], c: 2},
-    {q: "44. To insert a mathematical formula into a slide, use:", a: ["Insert -> Symbols", "Insert -> Equation", "Design -> Background", "Home -> Format Painter"], c: 1},
-    {q: "45. Which feature allows a specific animation to start only when you click a designated object?", a: ["Animation Painter", "Trigger", "Effect Options", "Slide Master"], c: 1},
-    {q: "46. Where to change background color/transparency for one slide only?", a: ["Design -> Format Background -> Apply", "View", "Slide Sorter", "Transitions -> Effect"], c: 0},
-    {q: "47. Which File tab option lets you save as a PDF?", a: ["Save", "Export or Save As", "Share", "Info"], c: 1},
-    {q: "48. How many slide layouts are typically available in PowerPoint?", a: ["3", "5", "7", "10"], c: 3},
-    {q: "49. To insert a new slide, which tab would you use?", a: ["Transition", "Home", "Design", "View"], c: 1},
-    {q: "50. Which of the following is NOT an option in the Insert tab?", a: ["Table", "SmartArt", "Animation", "Chart"], c: 2},
-    {q: "51. What is the primary function of the Transitions tab?", a: ["Effects to objects", "Insert images", "Moving effects within slide", "Moving effects between slides"], c: 3},
-    {q: "52. What is the primary function of the Animation tab?", a: ["Effects to objects", "Insert images", "Moving effects within slide", "Moving effects between slides"], c: 0},
-    {q: "53. To apply a theme to only the current slide, what must you do?", a: ["Right-click theme -> Apply to Current Slide", "Left-click once", "Design -> Apply to Selection", "Hold Shift while clicking"], c: 0},
-    {q: "54. In Excel, formulas always begin with which symbol?", a: ["@", "$", "#", "="], c: 3},
-    {q: "55. What is the Auto Fill feature in Excel used for?", a: ["Deleting empty cells", "Generating sequences like numbers", "Backup files", "Removing duplicates"], c: 1},
-    {q: "56. What feature allows consistent design (colors, fonts) for entire presentation?", a: ["Animation", "Slide Master", "Layout", "Theme"], c: 3},
-    {q: "57. What view is used to change slide order, delete slides, or apply transitions to multiple slides?", a: ["Normal View", "Reading View", "Slide Show View", "Slide Sorter View"], c: 3},
-    {q: "58. What term is used for visual effects applied to individual objects (text/images)?", a: ["Transitions", "Themes", "Animations", "Design"], c: 2},
-    {q: "59. What is the special slide that holds formatting/placeholders for all slides?", a: ["Outline View", "Handout Master", "Slide Master", "Presenter View"], c: 2},
-    {q: "60. Which tool adds spoken commentary, music, or sound effects?", a: ["Animations Pane", "Notes Pane", "Design Tab", "Insert > Audio"], c: 3},
-    {q: "61. The area below the slide pane in Normal View for private notes is:", a: ["Outline Pane", "Notes Pane", "Task Pane", "Reading Pane"], c: 1},
-    {q: "62. Which option adjusts slide proportions (4:3 vs 16:9)?", a: ["Slide Orientation", "Slide Size", "Layout Style", "Presentation View"], c: 1},
-    {q: "63. Which tool isolates a photo subject by making the surrounding areas transparent?", a: ["Recolor", "Picture Effects", "Remove Background", "Color Saturation"], c: 2}
+    // --- PowerPoint & Excel (26 Questions) ---
+    {q: "Where do you go to change slide size (e.g., Standard, Widescreen)?", a: ["Home -> Layout", "Design -> Slide Size", "Insert -> Shapes", "View -> Slide Master"], c: 1},
+    {q: "Which command lets you add a vector diagram such as Process, Cycle, or Hierarchy?", a: ["SmartArt", "Shapes", "Chart", "Screenshot"], c: 0},
+    {q: "Which feature lets you change the theme's font, color, or effects for the whole presentation?", a: ["Variants in Design", "Transitions tab", "Animations tab", "Insert Text Box"], c: 0},
+    {q: "How do you apply the same transition effect to every slide quickly?", a: ["Right-click each slide", "Design -> Variants", "Transitions -> Apply To All", "Animations -> Apply All"], c: 2},
+    {q: "What is the primary purpose of the Animation Painter?", a: ["Preview animations", "Copy animations from one object to another", "Remove animations", "Set start time"], c: 1},
+    {q: "Which animation type is used to make an object appear on the slide?", a: ["Exit", "Motion Path", "Entrance", "Emphasis"], c: 2},
+    {q: "To insert a mathematical formula into a slide, use:", a: ["Insert -> Symbols", "Insert -> Equation", "Design -> Background", "Home -> Format Painter"], c: 1},
+    {q: "Which feature allows a specific animation to start only when you click a designated object?", a: ["Animation Painter", "Trigger", "Effect Options", "Slide Master"], c: 1},
+    {q: "Where to change background color/transparency for one slide only?", a: ["Design -> Format Background", "View", "Slide Sorter", "Transitions -> Effect"], c: 0},
+    {q: "Which File tab option lets you save as a PDF?", a: ["Save", "Export or Save As", "Share", "Info"], c: 1},
+    {q: "How many slide layouts are typically available in PowerPoint?", a: ["3", "5", "7", "9"], c: 3},
+    {q: "To insert a new slide, which tab would you use?", a: ["Transition", "Home", "Design", "View"], c: 1},
+    {q: "Which of the following is NOT an option in the Insert tab?", a: ["Table", "SmartArt", "Animation", "Chart"], c: 2},
+    {q: "What is the primary function of the Transitions tab?", a: ["Effects to objects", "Insert images", "Moving effects between slides"], c: 2},
+    {q: "What is the primary function of the Animation tab?", a: ["Effects to objects", "Insert images", "Moving effects between slides"], c: 0},
+    {q: "To apply a theme to only the current slide, right-click theme and select 'Apply to Selected Slides'.", a: ["True", "False"], c: 0},
+    {q: "In Excel, formulas always begin with which symbol?", a: ["@", "$", "#", "="], c: 3},
+    {q: "What is the Auto Fill feature in Excel used for?", a: ["Deleting empty cells", "Generating sequences like numbers", "Backup files", "Removing duplicates"], c: 1},
+    {q: "What feature allows consistent design (colors, fonts) for entire presentation?", a: ["Animation", "Slide Master", "Layout", "Theme"], c: 3},
+    {q: "What view is used to change slide order or apply transitions to multiple slides?", a: ["Normal View", "Reading View", "Slide Sorter View"], c: 2},
+    {q: "What term is used for visual effects applied to individual objects on a slide?", a: ["Transitions", "Themes", "Animations", "Design"], c: 2},
+    {q: "What is the special slide that holds formatting/placeholders for all slides?", a: ["Outline View", "Handout Master", "Slide Master", "Presenter View"], c: 2},
+    {q: "Which tool adds spoken commentary, music, or sound effects?", a: ["Animations Pane", "Notes Pane", "Design Tab", "Insert > Audio"], c: 3},
+    {q: "The area below the slide pane for private notes is called the:", a: ["Outline Pane", "Notes Pane", "Task Pane", "Reading Pane"], c: 1},
+    {q: "Which option adjusts slide proportions (4:3 vs 16:9)?", a: ["Slide Orientation", "Slide Size", "Layout Style", "Presentation View"], c: 1},
+    {q: "Which tool isolates a photo subject by making the surrounding areas transparent?", a: ["Recolor", "Picture Effects", "Remove Background", "Color Saturation"], c: 2}
 ];
 
-let correctCount = 0, wrongCount = 0, currentIdx = 0;
-const qArea = document.getElementById('quiz-area');
+let scoreC = 0, scoreW = 0, current = 0;
+const quizBox = document.getElementById('quiz-box');
+document.getElementById('total-count').innerText = questions.length;
 
-function loadAll() {
+function loadQuiz() {
     questions.forEach((q, i) => {
         const card = document.createElement('div');
         card.className = 'q-card';
         card.innerHTML = `<span class="q-text">${i+1}. ${q.q}</span><div class="options">
             ${q.a.map((opt, idx) => `<div class="option" onclick="check(${i}, ${idx}, this)">${opt}</div>`).join('')}
         </div>`;
-        qArea.appendChild(card);
+        quizBox.appendChild(card);
     });
 }
 
 window.check = (qI, aI, btn) => {
-    const parent = btn.parentElement.parentElement;
-    if(parent.classList.contains('disabled')) return;
-    parent.classList.add('disabled');
-    currentIdx++;
+    const card = btn.parentElement.parentElement;
+    if(card.classList.contains('disabled')) return;
+    card.classList.add('disabled');
+    current++;
+    
     const correctIdx = questions[qI].c;
-    if(aI === correctIdx) { btn.classList.add('correct'); correctCount++; }
-    else { btn.classList.add('wrong'); parent.querySelectorAll('.option')[correctIdx].classList.add('correct'); wrongCount++; }
-    document.getElementById('c-count').innerText = correctCount;
-    document.getElementById('w-count').innerText = wrongCount;
-    document.getElementById('p-count').innerText = currentIdx;
-    if(currentIdx === questions.length) finish();
+    if(aI === correctIdx) {
+        btn.classList.add('correct');
+        scoreC++;
+    } else {
+        btn.classList.add('wrong');
+        card.querySelectorAll('.option')[correctIdx].classList.add('correct');
+        scoreW++;
+    }
+    
+    document.getElementById('c-count').innerText = scoreC;
+    document.getElementById('w-count').innerText = scoreW;
+    document.getElementById('p-count').innerText = current;
+    
+    if(current === questions.length) {
+        window.scrollTo(0,0);
+        quizBox.style.display = 'none';
+        document.getElementById('main-title').style.display = 'none';
+        const final = document.getElementById('final-screen');
+        final.style.display = 'block';
+        document.getElementById('final-score-pct').innerText = Math.round((scoreC/questions.length)*100) + "%";
+        document.getElementById('final-c').innerText = scoreC;
+        document.getElementById('final-w').innerText = scoreW;
+    }
 }
-
-function finish() {
-    window.scrollTo(0,0);
-    document.getElementById('quiz-header').style.display = 'none';
-    qArea.style.display = 'none';
-    const screen = document.getElementById('result-screen');
-    screen.style.display = 'block';
-    document.getElementById('final-c').innerText = correctCount;
-    document.getElementById('final-score').innerText = Math.round((correctCount / questions.length) * 100) + "%";
-}
-loadAll();
+loadQuiz();
 </script>
 </body>
 </html>
-
