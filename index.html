@@ -3,127 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Technical Writing & Office Mega Quiz</title>
+    <title>Word & PPT Quiz</title>
     <style>
-        :root { --blue: #1a73e8; --green: #28a745; --red: #dc3545; --bg: #f8f9fa; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 0; }
-        .header { background: var(--blue); color: white; padding: 15px; text-align: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
-        .stats { display: flex; justify-content: space-around; background: white; padding: 10px; font-weight: bold; border-bottom: 2px solid #ddd; position: sticky; top: 60px; z-index: 999; }
-        .container { max-width: 800px; margin: 20px auto; padding: 0 15px; }
-        .q-card { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-left: 5px solid #ccc; }
-        .q-text { font-size: 1.1em; font-weight: bold; margin-bottom: 15px; display: block; color: #333; line-height: 1.5; }
-        .options { display: flex; flex-direction: column; gap: 10px; }
-        .option { padding: 12px; border: 1px solid #ccc; border-radius: 8px; cursor: pointer; transition: 0.2s; background: #fff; }
-        .option:hover { background: #f1f3f4; border-color: var(--blue); }
-        .correct { background: #d4edda !important; border-color: var(--green) !important; color: #155724; font-weight: bold; }
-        .wrong { background: #f8d7da !important; border-color: var(--red) !important; color: #721c24; }
-        .disabled { pointer-events: none; opacity: 0.8; }
-        #result-screen { display: none; text-align: center; padding: 50px; background: white; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
-        .big-score { font-size: 4em; color: var(--blue); font-weight: 900; }
-        .btn-restart { padding: 15px 35px; background: var(--blue); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1em; margin-top: 20px; }
+        :root { --primary: #2b5797; --success: #28a745; --danger: #dc3545; --bg: #f4f7f9; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        h1 { color: var(--primary); text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; }
+        .stats { display: flex; justify-content: space-between; margin-bottom: 20px; font-weight: bold; background: #e9ecef; padding: 10px; border-radius: 8px; }
+        .q-card { margin-bottom: 25px; padding: 15px; border: 1px solid #dee2e6; border-radius: 10px; transition: 0.3s; }
+        .q-text { font-size: 1.1em; font-weight: 600; display: block; margin-bottom: 12px; color: #333; }
+        .options { display: grid; gap: 10px; }
+        .option { padding: 12px; border: 1px solid #ced4da; border-radius: 6px; cursor: pointer; background: white; transition: 0.2s; }
+        .option:hover { background: #f8f9fa; border-color: var(--primary); }
+        .correct { background: #d4edda !important; border-color: var(--success) !important; color: #155724; font-weight: bold; }
+        .wrong { background: #f8d7da !important; border-color: var(--danger) !important; color: #721c24; }
+        .disabled { pointer-events: none; opacity: 0.7; }
+        #result-screen { display: none; text-align: center; padding: 40px; }
+        .score-big { font-size: 4em; color: var(--primary); font-weight: bold; }
+        .btn { background: var(--primary); color: white; border: none; padding: 12px 30px; border-radius: 5px; cursor: pointer; font-size: 1em; margin-top: 20px; }
     </style>
 </head>
 <body>
 
-<div class="header">
-    <h2>Full Technical Writing & MS Office Quiz</h2>
-</div>
-
-<div class="stats">
-    <span style="color:var(--green)">✅ Correct: <span id="c-count">0</span></span>
-    <span style="color:var(--red)">❌ Wrong: <span id="w-count">0</span></span>
-    <span>📊 Progress: <span id="p-count">0</span> / <span id="total-q">0</span></span>
-</div>
-
 <div class="container">
-    <div id="quiz-box"></div>
+    <div id="quiz-header">
+        <h1>Microsoft Office Quiz (Word & PPT)</h1>
+        <div class="stats">
+            <span>Correct: <span id="c-count" style="color:var(--success)">0</span></span>
+            <span>Wrong: <span id="w-count" style="color:var(--danger)">0</span></span>
+            <span>Question: <span id="p-count">1</span> / 63</span>
+        </div>
+    </div>
+
+    <div id="quiz-area"></div>
+
     <div id="result-screen">
-        <h1>🎉 Quiz Completed!</h1>
-        <div class="big-score" id="final-score">0%</div>
-        <p>Correct: <span id="res-c">0</span> | Wrong: <span id="res-w">0</span></p>
-        <button class="btn-restart" onclick="location.reload()">Restart Quiz</button>
+        <h2>Exam Completed!</h2>
+        <div class="score-big" id="final-score">0%</div>
+        <p>You answered <span id="final-c">0</span> out of 63 questions correctly.</p>
+        <button class="btn" onclick="location.reload()">Restart Quiz</button>
     </div>
 </div>
 
 <script>
 const questions = [
-    // --- الجزء الأول: الأسئلة الأساسية والأخلاقيات ---
-    {q: "The main goal of technical writing is:", a: ["To entertain", "To explain processes/tech", "To share stories"], c: 1},
-    {q: "What is plagiarism?", a: ["Using own words", "Stealing ideas/words", "Style errors"], c: 1},
-    {q: "Turnitin produces:", a: ["Grammar check", "Originality report", "New essay"], c: 1},
-    
-    // --- الجزء الثاني: أسئلة Word (من الملف الأول question bank sections.pdf) ---
-    {q: "In formal reports, the figure caption must be added and is located:", a: ["Above the figure", "Under the figure", "Beside the figure"], c: 1}, [cite: 5, 29]
-    {q: "In formal reports, the table caption must be added and is located:", a: ["Above the table", "Under the table", "In the appendix"], c: 0}, [cite: 9, 31]
-    {q: "You can convert the text to WordArt.", a: ["True", "False"], c: 0}, [cite: 14]
-    {q: "Tabs in Word are organized according to:", a: ["Recent use", "Frequent use", "Names", "Functions"], c: 3}, [cite: 21]
-    {q: "Insert illustrations include:", a: ["Shapes", "Painter", "Tables", "Pages"], c: 0}, [cite: 24]
-    {q: "You can change the font formatting using which tab?", a: ["Home", "Insert", "View", "Review"], c: 0}, [cite: 34]
-    {q: "Arrows in a document are considered:", a: ["SmartArts", "Designs", "Charts", "Shapes"], c: 3}, [cite: 43]
-    {q: "Which are always inserted at the beginning of the document?", a: ["Cover pages", "Design Pages", "Page breaks"], c: 0}, [cite: 48]
-    {q: "You can split your word page into 2 columns or more through:", a: ["Design tab", "Layout tab", "Reference tab"], c: 1}, [cite: 55]
-    {q: "You can draw tables or Excel spreadsheets at the design menu.", a: ["True", "False"], c: 1}, [cite: 61]
-    {q: "You can insert Excel spreadsheet from which tab?", a: ["Insert", "Home", "Layout", "Draw"], c: 0}, [cite: 64]
-    {q: "Character that appears little below the normal text is called:", a: ["Subscript", "Superscript", "Heading"], c: 0}, [cite: 71]
-    {q: "The process of removing unwanted parts of an image is called:", a: ["Cropping", "Cutting", "Heading"], c: 0}, [cite: 81]
-    {q: "The Mini Toolbar in Word is used for:", a: ["Opening hidden menus", "Quickly accessing font formatting", "Inserting images"], c: 1}, [cite: 87, 90]
-    {q: "How many Text Wrapping options are available for images?", a: ["4", "5", "6", "7"], c: 3}, [cite: 108, 110]
-    {q: "To insert a special symbol, use:", a: ["Insert -> Equation", "Insert -> Symbol", "View -> Icons"], c: 1}, [cite: 120, 124]
-    {q: "The Design Tab under Table Tools allows you to:", a: ["Insert rows", "Change color, borders, and style", "Sort data"], c: 1}, [cite: 167, 170]
-    {q: "What is the quickest way to replace 'maroon' with 'burgundy' in several places?", a: ["Start over", "Spelling check", "Find and Replace"], c: 2}, [cite: 185]
-    {q: "What is SmartArt?", a: ["Chart feature", "Font style", "Predefined graphic layouts"], c: 2}, [cite: 201]
+    // --- File: question bank sections.pdf (Word) ---
+    {q: "1. In formal reports, the figure caption ________ be added and is located ________ the figure.", a: ["may, above", "must, above", "may, under", "must, under"], c: 3},
+    {q: "2. In formal reports, the table caption ________ be added and is located ________ the table.", a: ["may, above", "must, above", "may, under", "must, under"], c: 1},
+    {q: "3. You can convert the text to WordArt.", a: ["True", "False"], c: 0},
+    {q: "4. Tabs are organized according to:", a: ["Recent use", "Frequent use", "Names", "Functions"], c: 3},
+    {q: "5. Insert illustrations include:", a: ["Shapes", "Painter", "Tables", "Pages"], c: 0},
+    {q: "6. You can change the font formatting using the tab:", a: ["Home", "Insert", "View", "Review"], c: 0},
+    {q: "7. Arrows are considered ________ in the document.", a: ["SmartArts", "Designs", "Charts", "Shapes"], c: 3},
+    {q: "8. ________ are always inserted at the beginning of the document.", a: ["Cover pages", "Design Pages", "Page breaks", "Page Setup"], c: 0},
+    {q: "9. You can split your word page into 2 columns or more through:", a: ["Design tab", "Layout tab", "Reference tab", "View tab"], c: 1},
+    {q: "10. You can draw tables or Excel spreadsheets or add preset table at the design menu.", a: ["True", "False"], c: 1},
+    {q: "11. You can insert Excel spreadsheet from:", a: ["Insert tab", "Home tab", "Layout tab", "Draw tab"], c: 0},
+    {q: "12. Character that appears little below the normal text is called:", a: ["Subscript", "Superscript", "Heading", "All Caps"], c: 0},
+    {q: "13. To write a paragraph, press the 'SPACE' key to move from one line to another.", a: ["True", "False"], c: 1},
+    {q: "14. The process of removing unwanted part of an image is called:", a: ["Cropping", "Cutting", "Heading", "Inserting"], c: 0},
+    {q: "15. The Mini Toolbar in Word is used for:", a: ["Opening hidden menus", "Quickly accessing font formatting tools", "Inserting images", "Adjusting print settings"], c: 1},
+    {q: "16. The Format Painter tool is used to:", a: ["Copy text", "Paste images", "Copy formatting from one text to another", "Remove formatting"], c: 2},
+    {q: "17. To change text color in Word, go to:", a: ["Insert -> Shapes", "Home -> Font area -> Color", "View -> Page Color", "Layout -> Theme"], c: 1},
+    {q: "18. How many Text Wrapping options are available for images?", a: ["4", "5", "6", "7"], c: 3},
+    {q: "19. The option 'Inline with Text' for images means the image:", a: ["Is behind the text", "Is embedded within the text", "Is in front of the text", "Wraps around the text"], c: 1},
+    {q: "20. To insert a special symbol, use:", a: ["Insert -> Equation", "Insert -> Symbol", "View -> Icons", "Layout -> Special"], c: 1},
+    {q: "21. To edit an existing equation, you should:", a: ["Press Enter twice", "Double-click on the equation", "Right-click and choose Edit Text", "Press Ctrl + E"], c: 1},
+    {q: "22. The Highlight tool is used to:", a: ["Change font size", "Color the background of text for emphasis", "Add a text shadow", "Add page borders"], c: 1},
+    {q: "23. Microsoft Word can be used to design covers or posters because it allows:", a: ["Adding and formatting images and shapes", "Text only", "Writing code", "Creating spreadsheets"], c: 0},
+    {q: "24. The Picture Format tab appears when:", a: ["A table is selected", "A picture is selected", "A shape is inserted", "Text is highlighted"], c: 1},
+    {q: "25. To insert an equation from scratch, you should choose:", a: ["Insert -> New Equation", "Insert -> Symbol -> Drawing", "View -> Equation Builder", "Layout -> Formula"], c: 0},
+    {q: "26. To automatically adjust column widths based on the text inside, use:", a: ["Merge Cells", "AutoFit", "Align Text", "Table Style"], c: 1},
+    {q: "27. The Design Tab under Table Tools allows you to:", a: ["Insert new rows and columns", "Change color, borders, and font style", "Sort numerical data", "Create formulas"], c: 1},
+    {q: "28. Which of the following best describes the Ribbon?", a: ["A toolbar with various commands", "Feature that translates text", "Cable for printer", "Zoom slider"], c: 0},
+    {q: "29. In Microsoft Word, 'Calibri' is a:", a: ["Theme", "Username", "Font", "Color"], c: 2},
+    {q: "30. What is the quickest way to correct the same word error in several places?", a: ["Delete and start over", "Spelling and Grammar", "Find and Replace", "Insert SmartArt"], c: 2},
+    {q: "31. How do you save a document with a new name?", a: ["Click Format -> Save As", "Press Ctrl+S", "Type Ctrl+V", "Click the Save As button"], c: 3},
+    {q: "32. What is a bullet list in Word?", a: ["Highlighted with a bullet", "Numbered list", "Alphabetical list", "Centered list"], c: 0},
+    {q: "33. What is SmartArt?", a: ["Feature for charts", "Font style", "Tool for tables", "Set of predefined graphic layouts"], c: 3},
+    {q: "34. Which of the following best describes Microsoft Word?", a: ["Spreadsheet application", "Presentation tool", "Word processing program", "Database system"], c: 2},
+    {q: "35. You can change the font formatting using the tab:", a: ["Home", "Insert", "View", "Review"], c: 0},
+    {q: "36. Which feature allows users to insert tables, images, charts, and equations?", a: ["Home tab", "Insert tab", "Review tab", "Layout tab"], c: 1},
+    {q: "37. Which tab allows users to set page margins, orientation, and indentation?", a: ["Layout", "Insert", "View", "Draw"], c: 0},
 
-    // --- الجزء الثالث: أسئلة PPT & Excel (من الملف الثاني REVISION SEC.pdf) ---
-    {q: "Where do you change slide size (e.g., Standard, Widescreen)?", a: ["Home -> Layout", "Design -> Slide Size", "Insert -> Shapes"], c: 1}, [cite: 227]
-    {q: "Which command adds a vector diagram like Process or Hierarchy?", a: ["SmartArt", "Shapes", "Chart"], c: 0}, [cite: 232]
-    {q: "How do you apply the same transition effect to every slide quickly?", a: ["Right-click", "Design -> Variants", "Transitions -> Apply To All"], c: 2}, [cite: 245]
-    {q: "What is the primary purpose of the Animation Painter?", a: ["Preview", "Copy animation effects between objects", "Remove animations"], c: 1}, [cite: 249]
-    {q: "Which animation type makes an object appear on the slide?", a: ["Exit", "Motion Path", "Entrance", "Emphasis"], c: 2}, [cite: 255]
-    {q: "To insert a mathematical formula, use:", a: ["Insert -> Symbols", "Insert -> Equation", "Design -> Background"], c: 1}, [cite: 261]
-    {q: "Which feature allows an animation to start when clicking a designated object?", a: ["Animation Painter", "Trigger", "Effect Options"], c: 1}, [cite: 267]
-    {q: "In Excel, formulas always begin with which symbol?", a: ["@", "$", "#", "="], c: 3}, [cite: 317]
-    {q: "What is the Auto Fill feature in Excel used for?", a: ["Deleting cells", "Generating sequences like numbers", "Backup"], c: 1}, [cite: 320]
-    {q: "What view in PPT is used to change slide order or apply transitions to multiple slides?", a: ["Normal", "Reading", "Slide Sorter"], c: 2}, [cite: 332]
-    {q: "The special slide that holds formatting for all slides is:", a: ["Outline", "Handout Master", "Slide Master"], c: 2}, [cite: 342]
-    {q: "Tool used to add spoken commentary or music:", a: ["Animations Pane", "Notes Pane", "Insert > Audio"], c: 2}, [cite: 348]
-    {q: "Which tool isolates a photo subject by making surroundings transparent?", a: ["Recolor", "Picture Effects", "Remove Background"], c: 2} [cite: 362]
+    // --- File: REVISION SEC.pdf (PPT & Excel) ---
+    {q: "38. Where do you go to change slide size (Standard, Widescreen)?", a: ["Home -> Layout", "Design -> Slide Size", "Insert -> Shapes", "View -> Slide Master"], c: 1},
+    {q: "39. Which command lets you add a vector diagram (Process, Cycle, Hierarchy)?", a: ["SmartArt", "Shapes", "Chart", "Screenshot"], c: 0},
+    {q: "40. Which feature lets you change the theme's font, color, or effects for the whole presentation?", a: ["Variants in Design", "Transitions -> Effect", "Animations -> Painter", "Insert -> Text Box"], c: 0},
+    {q: "41. How do you apply the same transition effect to every slide quickly?", a: ["Right-click each slide", "Design -> Variants", "Transitions -> Apply To All", "Animations -> Apply All"], c: 2},
+    {q: "42. What is the primary purpose of the Animation Painter?", a: ["Preview animations", "Copy animations from one object to another", "Remove animations", "Set start time"], c: 1},
+    {q: "43. Which animation type is used to make an object appear on the slide?", a: ["Exit", "Motion Path", "Entrance", "Emphasis"], c: 2},
+    {q: "44. To insert a mathematical formula into a slide, use:", a: ["Insert -> Symbols", "Insert -> Equation", "Design -> Background", "Home -> Format Painter"], c: 1},
+    {q: "45. Which feature allows a specific animation to start only when you click a designated object?", a: ["Animation Painter", "Trigger", "Effect Options", "Slide Master"], c: 1},
+    {q: "46. Where to change background color/transparency for one slide only?", a: ["Design -> Format Background -> Apply", "View", "Slide Sorter", "Transitions -> Effect"], c: 0},
+    {q: "47. Which File tab option lets you save as a PDF?", a: ["Save", "Export or Save As", "Share", "Info"], c: 1},
+    {q: "48. How many slide layouts are typically available in PowerPoint?", a: ["3", "5", "7", "10"], c: 3},
+    {q: "49. To insert a new slide, which tab would you use?", a: ["Transition", "Home", "Design", "View"], c: 1},
+    {q: "50. Which of the following is NOT an option in the Insert tab?", a: ["Table", "SmartArt", "Animation", "Chart"], c: 2},
+    {q: "51. What is the primary function of the Transitions tab?", a: ["Effects to objects", "Insert images", "Moving effects within slide", "Moving effects between slides"], c: 3},
+    {q: "52. What is the primary function of the Animation tab?", a: ["Effects to objects", "Insert images", "Moving effects within slide", "Moving effects between slides"], c: 0},
+    {q: "53. To apply a theme to only the current slide, what must you do?", a: ["Right-click theme -> Apply to Current Slide", "Left-click once", "Design -> Apply to Selection", "Hold Shift while clicking"], c: 0},
+    {q: "54. In Excel, formulas always begin with which symbol?", a: ["@", "$", "#", "="], c: 3},
+    {q: "55. What is the Auto Fill feature in Excel used for?", a: ["Deleting empty cells", "Generating sequences like numbers", "Backup files", "Removing duplicates"], c: 1},
+    {q: "56. What feature allows consistent design (colors, fonts) for entire presentation?", a: ["Animation", "Slide Master", "Layout", "Theme"], c: 3},
+    {q: "57. What view is used to change slide order, delete slides, or apply transitions to multiple slides?", a: ["Normal View", "Reading View", "Slide Show View", "Slide Sorter View"], c: 3},
+    {q: "58. What term is used for visual effects applied to individual objects (text/images)?", a: ["Transitions", "Themes", "Animations", "Design"], c: 2},
+    {q: "59. What is the special slide that holds formatting/placeholders for all slides?", a: ["Outline View", "Handout Master", "Slide Master", "Presenter View"], c: 2},
+    {q: "60. Which tool adds spoken commentary, music, or sound effects?", a: ["Animations Pane", "Notes Pane", "Design Tab", "Insert > Audio"], c: 3},
+    {q: "61. The area below the slide pane in Normal View for private notes is:", a: ["Outline Pane", "Notes Pane", "Task Pane", "Reading Pane"], c: 1},
+    {q: "62. Which option adjusts slide proportions (4:3 vs 16:9)?", a: ["Slide Orientation", "Slide Size", "Layout Style", "Presentation View"], c: 1},
+    {q: "63. Which tool isolates a photo subject by making the surrounding areas transparent?", a: ["Recolor", "Picture Effects", "Remove Background", "Color Saturation"], c: 2}
 ];
 
-// --- منطق التشغيل ---
-let scoreC = 0, scoreW = 0, current = 0;
-const quizBox = document.getElementById('quiz-box');
-document.getElementById('total-q').innerText = questions.length;
+let correctCount = 0, wrongCount = 0, currentIdx = 0;
+const qArea = document.getElementById('quiz-area');
 
-function loadQuiz() {
+function loadAll() {
     questions.forEach((q, i) => {
         const card = document.createElement('div');
         card.className = 'q-card';
         card.innerHTML = `<span class="q-text">${i+1}. ${q.q}</span><div class="options">
             ${q.a.map((opt, idx) => `<div class="option" onclick="check(${i}, ${idx}, this)">${opt}</div>`).join('')}
         </div>`;
-        quizBox.appendChild(card);
+        qArea.appendChild(card);
     });
 }
 
 window.check = (qI, aI, btn) => {
-    const card = btn.parentElement.parentElement;
-    if(card.classList.contains('disabled')) return;
-    card.classList.add('disabled');
-    current++;
-    if(aI === questions[qI].c) { btn.classList.add('correct'); scoreC++; }
-    else { btn.classList.add('wrong'); card.querySelectorAll('.option')[questions[qI].c].classList.add('correct'); scoreW++; }
-    document.getElementById('c-count').innerText = scoreC;
-    document.getElementById('w-count').innerText = scoreW;
-    document.getElementById('p-count').innerText = current;
-    if(current === questions.length) {
-        quizBox.style.display = 'none';
-        document.getElementById('result-screen').style.display = 'block';
-        document.getElementById('final-score').innerText = Math.round((scoreC/questions.length)*100) + "%";
-        document.getElementById('res-c').innerText = scoreC;
-        document.getElementById('res-w').innerText = scoreW;
-    }
+    const parent = btn.parentElement.parentElement;
+    if(parent.classList.contains('disabled')) return;
+    parent.classList.add('disabled');
+    currentIdx++;
+    const correctIdx = questions[qI].c;
+    if(aI === correctIdx) { btn.classList.add('correct'); correctCount++; }
+    else { btn.classList.add('wrong'); parent.querySelectorAll('.option')[correctIdx].classList.add('correct'); wrongCount++; }
+    document.getElementById('c-count').innerText = correctCount;
+    document.getElementById('w-count').innerText = wrongCount;
+    document.getElementById('p-count').innerText = currentIdx;
+    if(currentIdx === questions.length) finish();
 }
-loadQuiz();
+
+function finish() {
+    window.scrollTo(0,0);
+    document.getElementById('quiz-header').style.display = 'none';
+    qArea.style.display = 'none';
+    const screen = document.getElementById('result-screen');
+    screen.style.display = 'block';
+    document.getElementById('final-c').innerText = correctCount;
+    document.getElementById('final-score').innerText = Math.round((correctCount / questions.length) * 100) + "%";
+}
+loadAll();
 </script>
 </body>
 </html>
