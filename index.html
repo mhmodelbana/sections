@@ -3,23 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Office Full Revision</title>
+    <title>Original Questions Quiz</title>
     <style>
         :root { --blue: #1a73e8; --green: #28a745; --red: #dc3545; --bg: #f8f9fa; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 0; }
         
-        /* البار العلوي كما طلبته */
         .stats { 
-            display: flex; 
-            justify-content: space-around; 
-            background: white; 
-            padding: 15px; 
-            font-weight: bold; 
-            border-bottom: 2px solid #ddd; 
-            position: sticky; 
-            top: 0; 
-            z-index: 999; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex; justify-content: space-around; background: white; 
+            padding: 15px; font-weight: bold; border-bottom: 2px solid #ddd; 
+            position: sticky; top: 0; z-index: 999; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
         .container { max-width: 800px; margin: 20px auto; padding: 0 15px; }
@@ -36,14 +28,7 @@
         .wrong { background: #f8d7da !important; border-color: var(--red) !important; color: #721c24; }
         .disabled { pointer-events: none; opacity: 0.8; }
 
-        #final-screen { 
-            display: none; 
-            text-align: center; 
-            padding: 50px; 
-            background: white; 
-            border-radius: 15px; 
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1); 
-        }
+        #final-screen { display: none; text-align: center; padding: 50px; background: white; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
         .score-num { font-size: 4em; color: var(--blue); font-weight: 900; margin: 20px 0; }
     </style>
 </head>
@@ -56,7 +41,7 @@
 </div>
 
 <div class="container">
-    <h1 id="main-title">Full Revision (63 Questions)</h1>
+    <h1 id="main-title">Full Revision (Original Content)</h1>
     <div id="quiz-box"></div>
 
     <div id="final-screen">
@@ -71,26 +56,26 @@
 
 <script>
 const questions = [
-    // --- Microsoft Word (37 Questions) ---
-    {q: "In formal reports, the figure caption must be added and is located under the figure.", a: ["True", "False"], c: 0},
-    {q: "In formal reports, the table caption must be added and is located above the table.", a: ["True", "False"], c: 0},
+    // --- FROM: question bank sections.pdf ---
+    {q: "In formal reports, the figure caption ________ be added and is located ________ the figure.", a: ["may, above", "must, above", "may, under", "must, under"], c: 3},
+    {q: "In formal reports, the table caption ________ be added and is located ________ the table.", a: ["may, above", "must, above", "may, under", "must, under"], c: 1},
     {q: "You can convert the text to WordArt.", a: ["True", "False"], c: 0},
-    {q: "Tabs are organized according to:", a: ["Recent use", "Frequent use", "Names", "Functions"], c: 3},
-    {q: "Insert illustrations include:", a: ["Shapes", "Painter", "Tables", "Pages"], c: 0},
-    {q: "You can change the font formatting using the tab:", a: ["Home", "Insert", "View", "Review"], c: 0},
+    {q: "Tabs are organized according to", a: ["Recent use", "Frequent use", "Names", "Functions"], c: 3},
+    {q: "Insert illustrations include", a: ["Shapes", "Painter", "Tables", "Pages"], c: 0},
+    {q: "You can change the font formatting using the tab", a: ["Home", "Insert", "View", "Review"], c: 0},
     {q: "Arrows are considered ________ in the document.", a: ["SmartArts", "Designs", "Charts", "Shapes"], c: 3},
-    {q: "Which are always inserted at the beginning of the document?", a: ["Cover pages", "Design Pages", "Page breaks", "Page Setup"], c: 0},
-    {q: "You can split your word page into 2 columns or more through:", a: ["Design tab", "Layout tab", "Reference tab", "View tab"], c: 1},
+    {q: "________ are always inserted at the beginning of the document.", a: ["Cover pages", "Design Pages", "Page breaks", "Page Setup"], c: 0},
+    {q: "You can split your word page into 2 columns or more through", a: ["Design tab", "Layout tab", "Reference tab", "View tab"], c: 1},
     {q: "You can draw tables or Excel spreadsheets or add preset table at the design menu.", a: ["True", "False"], c: 1},
-    {q: "You can insert Excel spreadsheet from:", a: ["Insert", "Home", "Layout", "Draw"], c: 0},
-    {q: "Character that appears little below the normal text is called:", a: ["Subscript", "Superscript", "Heading", "All Caps"], c: 0},
-    {q: "To write a paragraph, press the 'SPACE' key to move from one line to another.", a: ["True", "False"], c: 1},
-    {q: "The process of removing unwanted part of an image is called:", a: ["Cropping", "Cutting", "Heading", "Inserting"], c: 0},
+    {q: "You can insert Excel spreadsheet from", a: ["Insert", "Home", "Layout", "Draw"], c: 0},
+    {q: "Character that appears little below the normal text is called", a: ["Subscript", "Superscript", "Heading", "All Caps"], c: 0},
+    {q: "To write a paragraph, press the \"SPACE\" key to move from one line to another.", a: ["True", "False"], c: 1},
+    {q: "The process of removing unwanted part of an image is called", a: ["Cropping", "Cutting", "Heading", "Inserting"], c: 0},
     {q: "The Mini Toolbar in Word is used for:", a: ["Opening hidden menus", "Quickly accessing font formatting tools", "Inserting images", "Adjusting print settings"], c: 1},
     {q: "The Format Painter tool is used to:", a: ["Copy text", "Paste images", "Copy formatting from one text to another", "Remove formatting"], c: 2},
     {q: "To change text color in Word, go to:", a: ["Insert -> Shapes", "Home -> Font area -> Color", "View -> Page Color", "Layout -> Theme"], c: 1},
     {q: "How many Text Wrapping options are available for images?", a: ["4", "5", "6", "7"], c: 3},
-    {q: "The option 'Inline with Text' for images means the image is embedded within the text.", a: ["True", "False"], c: 0},
+    {q: "The option \"Inline with Text\" for images means the image is embedded within the text.", a: ["True", "False"], c: 0},
     {q: "To insert a special symbol, use:", a: ["Insert -> Equation", "Insert -> Symbol", "View -> Icons", "Layout -> Special"], c: 1},
     {q: "To edit an existing equation, you should:", a: ["Press Enter twice", "Double-click on the equation", "Right-click and choose Edit Text", "Press Ctrl + E"], c: 1},
     {q: "The Highlight tool is used to:", a: ["Change font size", "Color the background of text for emphasis", "Add a text shadow", "Add page borders"], c: 1},
@@ -100,43 +85,44 @@ const questions = [
     {q: "To automatically adjust column widths based on the text inside, use:", a: ["Merge Cells", "AutoFit", "Align Text", "Table Style"], c: 1},
     {q: "The Design Tab under Table Tools allows you to change color, borders, and style.", a: ["True", "False"], c: 0},
     {q: "Which of the following best describes the Ribbon?", a: ["A toolbar with various commands", "Feature that translates text", "Cable for printer", "Zoom slider"], c: 0},
-    {q: "In Microsoft Word, 'Calibri' is a:", a: ["Theme", "Username", "Font", "Color"], c: 2},
-    {q: "What is the quickest way to correct the same word error in several places?", a: ["Delete and start over", "Spelling and Grammar", "Find and Replace", "Insert SmartArt"], c: 2},
-    {q: "How do you save a document with a new name?", a: ["Click Format -> Save As", "Press Ctrl+S", "Type Ctrl+V", "Click the Save As button"], c: 3},
-    {q: "What is a bullet list in Word?", a: ["Highlighted with a bullet", "Numbered list", "Alphabetical list", "Centered list"], c: 0},
-    {q: "What is SmartArt?", a: ["Feature for charts", "Font style", "Tool for tables", "Set of predefined graphic layouts"], c: 3},
-    {q: "Which of the following best describes Microsoft Word?", a: ["Spreadsheet application", "Presentation tool", "Word processing program", "Database system"], c: 2},
-    {q: "You can change the font formatting using the tab:", a: ["Home", "Insert", "View", "Review"], c: 0},
-    {q: "Which feature allows users to insert tables, images, charts, and equations?", a: ["Home tab", "Insert tab", "Review tab", "Layout tab"], c: 1},
-    {q: "Which tab allows users to set page margins, orientation, and indentation?", a: ["Layout", "Insert", "View", "Draw"], c: 0},
+    {q: "In Microsoft Word, \"Calibri\" is a:", a: ["Theme", "Username", "Font", "Color"], c: 2},
+    {q: "You used the word \"maroon\" instead of \"burgundy\" in several places. What is the quickest way for you to correct your mistakes?", a: ["Delete all the text and start over.", "Use the Spelling and Grammar features.", "Use the Find and Replace feature.", "Insert SmartArt."], c: 2},
+    {q: "How do you save a document with a new name?", a: ["Click Format and select \"Save As.\"", "Press Ctrl + S and enter a new name.", "Type Ctrl + V and enter a new name.", "Click the Save As button."], c: 3},
+    {q: "What is a bullet list in Word?", a: ["a list of items that are highlighted with a bullet", "a list of items that are numbered", "a list of items that are sorted in alphabetical order", "a list of items that are in the center of the page"], c: 0},
+    {q: "What is SmartArt?", a: ["A feature for making charts and graphs", "a font style in Word", "a tool for creating tables", "a set of predefined graphic layouts"], c: 3},
+    {q: "Which of the following best describes Microsoft Word?", a: ["A spreadsheet application", "A presentation tool", "A word processing program", "A database management system"], c: 2},
+    {q: "You can change the font formatting using the tab", a: ["Home", "Insert", "View", "Review"], c: 0},
+    {q: "Which feature of Microsoft Word allows users to insert tables, images, charts, and equations?", a: ["Home tab", "Insert tab", "Review tab", "Layout tab"], c: 1},
+    {q: "Which tab in Microsoft Word allows users to set page margins, orientation, and indentation?", a: ["Layout tab", "Insert tab", "View tab", "Draw tab"], c: 0},
 
-    // --- PowerPoint & Excel (26 Questions) ---
-    {q: "Where do you go to change slide size (e.g., Standard, Widescreen)?", a: ["Home -> Layout", "Design -> Slide Size", "Insert -> Shapes", "View -> Slide Master"], c: 1},
-    {q: "Which command lets you add a vector diagram such as Process, Cycle, or Hierarchy?", a: ["SmartArt", "Shapes", "Chart", "Screenshot"], c: 0},
-    {q: "Which feature lets you change the theme's font, color, or effects for the whole presentation?", a: ["Variants in Design", "Transitions tab", "Animations tab", "Insert Text Box"], c: 0},
-    {q: "How do you apply the same transition effect to every slide quickly?", a: ["Right-click each slide", "Design -> Variants", "Transitions -> Apply To All", "Animations -> Apply All"], c: 2},
-    {q: "What is the primary purpose of the Animation Painter?", a: ["Preview animations", "Copy animations from one object to another", "Remove animations", "Set start time"], c: 1},
+    // --- FROM: REVISION SEC.pdf ---
+    {q: "Where do you go to change slide size (e.g., Standard, Widescreen, or custom dimensions)?", a: ["Home tab→ Layout", "Design tab → Slide Size", "Insert tab → Shapes", "View tab→ Slide Master"], c: 1},
+    {q: "Which Insert tab command lets you add a vector diagram such as Process, Cycle, or Hierarchy?", a: ["SmartArt", "Shapes", "Chart", "Screenshot"], c: 0},
+    {q: "Which PowerPoint feature lets you change the theme's font, color, or effects for the whole presentation?", a: ["Variants in the Design tab", "Transitions tab→ Effect Options", "Animations tab → Animation Painter", "Insert tab → Text Box"], c: 0},
+    {q: "How do you apply the same transition effect to every slide quickly?", a: ["Right-click each slide", "Design tab → Variants → Apply to All", "Transitions tab → select effect → Apply To All", "Animations tab→ Apply to All"], c: 2},
+    {q: "What is the primary purpose of the Animation Painter?", a: ["To preview animations", "To copy animation effects from one object to another", "To remove all animations", "To set the animation start time"], c: 1},
     {q: "Which animation type is used to make an object appear on the slide?", a: ["Exit", "Motion Path", "Entrance", "Emphasis"], c: 2},
-    {q: "To insert a mathematical formula into a slide, use:", a: ["Insert -> Symbols", "Insert -> Equation", "Design -> Background", "Home -> Format Painter"], c: 1},
-    {q: "Which feature allows a specific animation to start only when you click a designated object?", a: ["Animation Painter", "Trigger", "Effect Options", "Slide Master"], c: 1},
-    {q: "Where to change background color/transparency for one slide only?", a: ["Design -> Format Background", "View", "Slide Sorter", "Transitions -> Effect"], c: 0},
-    {q: "Which File tab option lets you save as a PDF?", a: ["Save", "Export or Save As", "Share", "Info"], c: 1},
-    {q: "How many slide layouts are typically available in PowerPoint?", a: ["3", "5", "7", "9"], c: 3},
+    {q: "To insert a mathematical formula into a slide, which command should you use?", a: ["Insert -> Symbols", "Insert → Equation", "Design → Background", "Home → Format Painter"], c: 1},
+    {q: "Which feature allows a specific animation to start only when you click a designated object on the same slide?", a: ["Animation Painter", "Trigger", "Effect Options", "Slide Master"], c: 1},
+    {q: "If you want a different background color or transparency for one slide only, where can you change it?", a: ["Design → Format Background → Apply", "View → Slide Sorter", "Transitions → Effect Options", "Insert → Background Style"], c: 0},
+    {q: "Which File tab option lets you save your presentation as a PDF or other file type?", a: ["Save", "Export or Save As", "Share", "Info"], c: 1},
+    {q: "How many slide layouts are typically available in PowerPoint?", a: ["3", "5", "7", "10"], c: 3},
     {q: "To insert a new slide, which tab would you use?", a: ["Transition", "Home", "Design", "View"], c: 1},
     {q: "Which of the following is NOT an option in the Insert tab?", a: ["Table", "SmartArt", "Animation", "Chart"], c: 2},
-    {q: "What is the primary function of the Transitions tab?", a: ["Effects to objects", "Insert images", "Moving effects between slides"], c: 2},
-    {q: "What is the primary function of the Animation tab?", a: ["Effects to objects", "Insert images", "Moving effects between slides"], c: 0},
-    {q: "To apply a theme to only the current slide, right-click theme and select 'Apply to Selected Slides'.", a: ["True", "False"], c: 0},
+    {q: "What is the primary function of the Transitions tab?", a: ["Adding animation effects to objects", "Inserting images", "Adding animation effects between slides"], c: 2},
+    {q: "What is the primary function of the Animation tab?", a: ["Adding animation effects to objects", "Inserting images", "Adding animation effects between slides"], c: 0},
+    {q: "If you want to apply a theme to only the current slide, what action should you take?", a: ["Right-click the theme and select 'Apply to Selected Slides'", "Double-click the theme", "Click the Design tab and choose 'Current Slide Only'", "Themes always apply to all slides"], c: 0},
     {q: "In Excel, formulas always begin with which symbol?", a: ["@", "$", "#", "="], c: 3},
-    {q: "What is the Auto Fill feature in Excel used for?", a: ["Deleting empty cells", "Generating sequences like numbers", "Backup files", "Removing duplicates"], c: 1},
-    {q: "What feature allows consistent design (colors, fonts) for entire presentation?", a: ["Animation", "Slide Master", "Layout", "Theme"], c: 3},
-    {q: "What view is used to change slide order or apply transitions to multiple slides?", a: ["Normal View", "Reading View", "Slide Sorter View"], c: 2},
-    {q: "What term is used for visual effects applied to individual objects on a slide?", a: ["Transitions", "Themes", "Animations", "Design"], c: 2},
-    {q: "What is the special slide that holds formatting/placeholders for all slides?", a: ["Outline View", "Handout Master", "Slide Master", "Presenter View"], c: 2},
-    {q: "Which tool adds spoken commentary, music, or sound effects?", a: ["Animations Pane", "Notes Pane", "Design Tab", "Insert > Audio"], c: 3},
-    {q: "The area below the slide pane for private notes is called the:", a: ["Outline Pane", "Notes Pane", "Task Pane", "Reading Pane"], c: 1},
-    {q: "Which option adjusts slide proportions (4:3 vs 16:9)?", a: ["Slide Orientation", "Slide Size", "Layout Style", "Presentation View"], c: 1},
-    {q: "Which tool isolates a photo subject by making the surrounding areas transparent?", a: ["Recolor", "Picture Effects", "Remove Background", "Color Saturation"], c: 2}
+    {q: "What is the purpose of the Auto Fill feature in Excel?", a: ["Deleting empty cells", "Generating sequences like numbers", "Backing up files", "Removing duplicates"], c: 1},
+    {q: "What is the name of the feature that allows you to apply a consistent design (colors, fonts, effects) to an entire presentation?", a: ["Animation", "Slide Master", "Layout", "Theme"], c: 3},
+    {q: "Which view in PowerPoint is used primarily for changing the slide order, deleting slides, or applying a transition to multiple slides at once?", a: ["Normal View", "Reading View", "Slide Sorter View", "Outline View"], c: 2},
+    {q: "What term is used for the visual effects applied to individual objects on a slide (like text or images)?", a: ["Transitions", "Themes", "Animations", "Design"], c: 2},
+    {q: "What is the special slide that holds the formatting and placeholders for all the slides in a presentation?", a: ["Outline View", "Handout Master", "Slide Master", "Presenter View"], c: 2},
+    {q: "Which tool would you use to add spoken commentary, music, or other sound effects to your presentation?", a: ["Animations Pane", "Notes Pane", "Design Tab", "Insert > Audio"], c: 3},
+    {q: "The area below the slide pane in Normal View, where you can add information visible only to the presenter, is called the:", a: ["Outline Pane", "Notes Pane", "Task Pane", "Reading Pane"], c: 1},
+    {q: "In PowerPoint, which option allows you to adjust the proportions of your slides (4:3 vs 16:9)?", a: ["Slide Orientation", "Slide Size", "Layout Style", "Presentation View"], c: 1},
+    {q: "Which image formatting tool is used to isolate the subject of a photo by making the surrounding areas transparent?", a: ["Recolor", "Picture Effects", "Remove Background", "Color Saturation"], c: 2},
+    {q: "When you want to add a picture, clip art, chart, or shape to your slide, which ribbon tab should you click?", a: ["Data", "Review", "Animation", "Insert"], c: 3}
 ];
 
 let scoreC = 0, scoreW = 0, current = 0;
@@ -159,27 +145,17 @@ window.check = (qI, aI, btn) => {
     if(card.classList.contains('disabled')) return;
     card.classList.add('disabled');
     current++;
-    
     const correctIdx = questions[qI].c;
-    if(aI === correctIdx) {
-        btn.classList.add('correct');
-        scoreC++;
-    } else {
-        btn.classList.add('wrong');
-        card.querySelectorAll('.option')[correctIdx].classList.add('correct');
-        scoreW++;
-    }
-    
+    if(aI === correctIdx) { btn.classList.add('correct'); scoreC++; }
+    else { btn.classList.add('wrong'); card.querySelectorAll('.option')[correctIdx].classList.add('correct'); scoreW++; }
     document.getElementById('c-count').innerText = scoreC;
     document.getElementById('w-count').innerText = scoreW;
     document.getElementById('p-count').innerText = current;
-    
     if(current === questions.length) {
         window.scrollTo(0,0);
         quizBox.style.display = 'none';
         document.getElementById('main-title').style.display = 'none';
-        const final = document.getElementById('final-screen');
-        final.style.display = 'block';
+        document.getElementById('final-screen').style.display = 'block';
         document.getElementById('final-score-pct').innerText = Math.round((scoreC/questions.length)*100) + "%";
         document.getElementById('final-c').innerText = scoreC;
         document.getElementById('final-w').innerText = scoreW;
