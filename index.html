@@ -1,169 +1,249 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>full revision pdf Questions Quiz</title>
+    <title>MNU-بنك الاسئلة لمقرر القانون وحقوق الانسان</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Noto+Kufi+Arabic:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --blue: #1a73e8; --green: #28a745; --red: #dc3545; --bg: #f8f9fa; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 0; }
-        
-        .stats { 
-            display: flex; justify-content: space-around; background: white; 
-            padding: 15px; font-weight: bold; border-bottom: 2px solid #ddd; 
-            position: sticky; top: 0; z-index: 999; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        :root {
+            --bg-deep: #0f172a; --bg-card: #1e293b; --accent-cyan: #06b6d4;
+            --accent-green: #10b981; --accent-red: #ef4444; --text-main: #f8fafc;
+            --text-muted: #94a3b8; --font-ar: 'Noto Kufi Arabic', sans-serif;
+            --font-en: 'Inter', sans-serif; --border: rgba(255, 255, 255, 0.05);
         }
 
-        .container { max-width: 800px; margin: 20px auto; padding: 0 15px; }
-        #main-title { text-align: center; color: var(--blue); margin-bottom: 30px; }
+        body { background-color: var(--bg-deep); color: var(--text-main); font-family: var(--font-ar); margin: 0; display: flex; flex-direction: column; min-height: 100vh; }
         
-        .q-card { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-left: 5px solid #ccc; }
-        .q-text { font-size: 1.1em; font-weight: bold; margin-bottom: 15px; display: block; color: #333; line-height: 1.5; }
-        
-        .options { display: flex; flex-direction: column; gap: 10px; }
-        .option { padding: 12px; border: 1px solid #ccc; border-radius: 8px; cursor: pointer; transition: 0.2s; background: #fff; }
-        .option:hover { background: #f1f3f4; border-color: var(--blue); }
-        
-        .correct { background: #d4edda !important; border-color: var(--green) !important; color: #155724; font-weight: bold; }
-        .wrong { background: #f8d7da !important; border-color: var(--red) !important; color: #721c24; }
-        .disabled { pointer-events: none; opacity: 0.8; }
+        .stats-bar {
+            position: sticky; top: 0; z-index: 100; background: rgba(15, 23, 42, 0.98);
+            backdrop-filter: blur(15px); border-bottom: 1px solid var(--border);
+            padding: 15px 40px; display: flex; justify-content: space-between; align-items: center;
+        }
 
-        #final-screen { display: none; text-align: center; padding: 50px; background: white; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
-        .score-num { font-size: 4em; color: var(--blue); font-weight: 900; margin: 20px 0; }
+        .course-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 700; font-size: 1.1rem; }
+        .q-counter { font-family: var(--font-en); font-weight: 600; color: var(--accent-cyan); font-size: 1.1rem; }
+
+        .container { max-width: 800px; margin: 40px auto; padding: 0 20px; flex: 1; width: 100%; box-sizing: border-box; }
+        
+        .q-card { background: var(--bg-card); border-radius: 20px; padding: 40px; border: 1px solid var(--border); display: none; }
+        .q-card.active { display: block; animation: slideUp 0.5s ease; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .q-text { font-size: 1.4rem; margin-bottom: 35px; line-height: 1.8; text-align: right; }
+        
+        .options-list { display: flex; flex-direction: column; gap: 15px; }
+        .option { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); 
+            padding: 20px 25px; border-radius: 12px; cursor: pointer; transition: 0.3s;
+            text-align: right; font-size: 1.1rem;
+        }
+        
+        .option:hover:not(.disabled) { background: rgba(255, 255, 255, 0.05); border-color: var(--accent-cyan); transform: translateX(-5px); }
+        .option.correct { background: rgba(16, 185, 129, 0.15) !important; border-color: var(--accent-green) !important; color: white; }
+        .option.wrong { background: rgba(239, 68, 68, 0.15) !important; border-color: var(--accent-red) !important; color: white; }
+        .option.disabled { cursor: not-allowed; }
+
+        #result-screen { text-align: center; display: none; background: var(--bg-card); padding: 50px; border-radius: 24px; border: 1px solid var(--border); }
+        .final-score { font-size: 4.5rem; font-family: var(--font-en); color: var(--accent-cyan); font-weight: 300; }
+        
+        .btn { padding: 14px 35px; border-radius: 8px; font-weight: 700; cursor: pointer; border: none; margin: 10px; font-family: var(--font-ar); transition: 0.3s; }
+        .btn-primary { background: var(--accent-cyan); color: #000; }
+        .btn-outline { background: transparent; color: white; border: 1px solid var(--border); }
+
+        .rev-item { background: rgba(255,255,255,0.01); border: 1px solid var(--border); padding: 20px; border-radius: 12px; margin-bottom: 15px; text-align: right; border-right: 5px solid var(--accent-cyan); }
+        
+        footer { padding: 40px; text-align: center; opacity: 0.5; font-family: var(--font-en); letter-spacing: 5px; font-size: 0.7rem; color: var(--text-muted); }
+        
+        @media (max-width: 600px) {
+            .stats-bar { padding: 15px; }
+            .course-title { display: none; }
+            .q-text { font-size: 1.2rem; }
+            .option { padding: 15px; font-size: 1rem; }
+        }
     </style>
 </head>
 <body>
 
-<div class="stats">
-    <span>✅ Correct: <span id="c-count">0</span></span>
-    <span>❌ Wrong: <span id="w-count">0</span></span>
-    <span>📊 Progress: <span id="p-count">0</span> / <span id="total-count">0</span></span>
-</div>
-
-<div class="container">
-    <h1 id="main-title">Full Revision (sections pdf)</h1>
-    <div id="quiz-box"></div>
-
-    <div id="final-screen">
-        <h2>🎉 Finished!</h2>
-        <div class="score-num" id="final-score-pct">0%</div>
-        <p style="font-size: 1.3em;">
-            Correct: <span id="final-c">0</span> | Wrong: <span id="final-w">0</span>
-        </p>
-        <button onclick="location.reload()" style="padding: 15px 40px; background: var(--blue); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1em;">Restart Quiz</button>
+    <div class="stats-bar">
+        <div class="q-counter"><span id="current-idx">01</span> / <span id="total-q-stat">00</span></div>
+        <div class="course-title">قانون وحقوق الإنسان - كلية الهندسة</div>
+        <div style="font-family: var(--font-en); font-size: 0.85rem; display: flex; gap: 15px;">
+            <span style="color: var(--accent-green);">CORRECT: <span id="correct-count">0</span></span>
+            <span style="color: var(--accent-red);">WRONG: <span id="wrong-count">0</span></span>
+        </div>
     </div>
-</div>
+
+    <div class="container">
+        <div id="quiz-mount"></div>
+        <div id="result-screen">
+            <div class="final-score" id="final-score-val">0%</div>
+            <p style="color: var(--text-muted); font-family: var(--font-en); letter-spacing: 2px;">ASSESSMENT COMPLETE</p>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="location.reload()">RESTART</button>
+                <button class="btn btn-outline" id="review-btn" onclick="showReview()">REVIEW MISTAKES</button>
+            </div>
+            <div id="review-container" style="margin-top: 30px;"></div>
+        </div>
+    </div>
+
+    <footer>POWERED BY BANA 2026</footer>
 
 <script>
-const questions = [
-    // --- FROM: question bank sections.pdf ---
-    {q: "In formal reports, the figure caption ________ be added and is located ________ the figure.", a: ["may, above", "must, above", "may, under", "must, under"], c: 3},
-    {q: "In formal reports, the table caption ________ be added and is located ________ the table.", a: ["may, above", "must, above", "may, under", "must, under"], c: 1},
-    {q: "You can convert the text to WordArt.", a: ["True", "False"], c: 0},
-    {q: "Tabs are organized according to", a: ["Recent use", "Frequent use", "Names", "Functions"], c: 3},
-    {q: "Insert illustrations include", a: ["Shapes", "Painter", "Tables", "Pages"], c: 0},
-    {q: "You can change the font formatting using the tab", a: ["Home", "Insert", "View", "Review"], c: 0},
-    {q: "Arrows are considered ________ in the document.", a: ["SmartArts", "Designs", "Charts", "Shapes"], c: 3},
-    {q: "________ are always inserted at the beginning of the document.", a: ["Cover pages", "Design Pages", "Page breaks", "Page Setup"], c: 0},
-    {q: "You can split your word page into 2 columns or more through", a: ["Design tab", "Layout tab", "Reference tab", "View tab"], c: 1},
-    {q: "You can draw tables or Excel spreadsheets or add preset table at the design menu.", a: ["True", "False"], c: 1},
-    {q: "You can insert Excel spreadsheet from", a: ["Insert", "Home", "Layout", "Draw"], c: 0},
-    {q: "Character that appears little below the normal text is called", a: ["Subscript", "Superscript", "Heading", "All Caps"], c: 0},
-    {q: "To write a paragraph, press the \"SPACE\" key to move from one line to another.", a: ["True", "False"], c: 1},
-    {q: "The process of removing unwanted part of an image is called", a: ["Cropping", "Cutting", "Heading", "Inserting"], c: 0},
-    {q: "The Mini Toolbar in Word is used for:", a: ["Opening hidden menus", "Quickly accessing font formatting tools", "Inserting images", "Adjusting print settings"], c: 1},
-    {q: "The Format Painter tool is used to:", a: ["Copy text", "Paste images", "Copy formatting from one text to another", "Remove formatting"], c: 2},
-    {q: "To change text color in Word, go to:", a: ["Insert -> Shapes", "Home -> Font area -> Color", "View -> Page Color", "Layout -> Theme"], c: 1},
-    {q: "How many Text Wrapping options are available for images?", a: ["4", "5", "6", "7"], c: 3},
-    {q: "The option \"Inline with Text\" for images means the image is embedded within the text.", a: ["True", "False"], c: 0},
-    {q: "To insert a special symbol, use:", a: ["Insert -> Equation", "Insert -> Symbol", "View -> Icons", "Layout -> Special"], c: 1},
-    {q: "To edit an existing equation, you should:", a: ["Press Enter twice", "Double-click on the equation", "Right-click and choose Edit Text", "Press Ctrl + E"], c: 1},
-    {q: "The Highlight tool is used to:", a: ["Change font size", "Color the background of text for emphasis", "Add a text shadow", "Add page borders"], c: 1},
-    {q: "Microsoft Word can be used to design covers or posters because it allows adding and formatting images/shapes.", a: ["True", "False"], c: 0},
-    {q: "The Picture Format tab appears when a picture is selected.", a: ["True", "False"], c: 0},
-    {q: "To insert an equation from scratch, you should choose:", a: ["Insert -> New Equation", "Insert -> Symbol -> Drawing", "View -> Equation Builder", "Layout -> Formula"], c: 0},
-    {q: "To automatically adjust column widths based on the text inside, use:", a: ["Merge Cells", "AutoFit", "Align Text", "Table Style"], c: 1},
-    {q: "The Design Tab under Table Tools allows you to change color, borders, and style.", a: ["True", "False"], c: 0},
-    {q: "Which of the following best describes the Ribbon?", a: ["A toolbar with various commands", "Feature that translates text", "Cable for printer", "Zoom slider"], c: 0},
-    {q: "In Microsoft Word, \"Calibri\" is a:", a: ["Theme", "Username", "Font", "Color"], c: 2},
-    {q: "You used the word \"maroon\" instead of \"burgundy\" in several places. What is the quickest way for you to correct your mistakes?", a: ["Delete all the text and start over.", "Use the Spelling and Grammar features.", "Use the Find and Replace feature.", "Insert SmartArt."], c: 2},
-    {q: "How do you save a document with a new name?", a: ["Click Format and select \"Save As.\"", "Press Ctrl + S and enter a new name.", "Type Ctrl + V and enter a new name.", "Click the Save As button."], c: 3},
-    {q: "What is a bullet list in Word?", a: ["a list of items that are highlighted with a bullet", "a list of items that are numbered", "a list of items that are sorted in alphabetical order", "a list of items that are in the center of the page"], c: 0},
-    {q: "What is SmartArt?", a: ["A feature for making charts and graphs", "a font style in Word", "a tool for creating tables", "a set of predefined graphic layouts"], c: 3},
-    {q: "Which of the following best describes Microsoft Word?", a: ["A spreadsheet application", "A presentation tool", "A word processing program", "A database management system"], c: 2},
-    {q: "You can change the font formatting using the tab", a: ["Home", "Insert", "View", "Review"], c: 0},
-    {q: "Which feature of Microsoft Word allows users to insert tables, images, charts, and equations?", a: ["Home tab", "Insert tab", "Review tab", "Layout tab"], c: 1},
-    {q: "Which tab in Microsoft Word allows users to set page margins, orientation, and indentation?", a: ["Layout tab", "Insert tab", "View tab", "Draw tab"], c: 0},
+    const bank = [
+        // --- أولاً: أسئلة الاختيار من متعدد ---
+        { q: "لماذا يحتاج المجتمع إلى قانون؟", opts: ["أ) لأن الإنسان اجتماعي بطبعه ويتعاون مع غيره.", "ب) لتبادل المنافع وإشباع الحاجات المختلفة.", "ج) لأن الإنسان أناني بطبعه ويميل لإشباع حاجاته على حساب الآخرين.", "د) لأن الإنسان ضعيف بنفسه قوي بغيره."], ans: 2 },
+        { q: "ما هما العنصران اللذان تتحلل إليهما القاعدة القانونية؟", opts: ["أ) العام والخاص.", "ب) الفرض والحكم.", "ج) الإلزام والجزاء.", "د) العمومية والتجريد."], ans: 1 },
+        { q: "ما هو الهدف الأساسي من جعل القاعدة القانونية 'عامة ومجردة'؟", opts: ["أ) تسهيل تطبيق القانون.", "ب) تحقيق المساواة بين أفراد المجتمع.", "ج) زيادة هيئة السلطة العامة.", "د) تقليل عدد القواعد القانونية."], ans: 1 },
+        { q: "ما هي الثورة التي أدت إلى إعلان حقوق الإنسان والمواطن عام 1789؟", opts: ["أ) الثورة الأمريكية.", "ب) الثورة الفرنسية.", "ج) الثورة الروسية.", "د) الثورة الصناعية."], ans: 1 },
+        { q: "ما هي المنظمة الدولية التي تهدف إلى توفير الحماية الدولية للاجئين؟", opts: ["أ) مفوضية الأمم المتحدة لشؤون اللاجئين.", "ب) منظمة العمل الدولية.", "ج) منظمة اليونسكو.", "د) منظمة الأمم المتحدة للأغذية والزراعة."], ans: 0 },
+        { q: "'التنفيذ العيني' أو 'التعويض' أو 'البطلان' هي صور لأي نوع من الجزاءات؟", opts: ["أ) الجزاء الجنائي.", "ب) الجزاء المدني.", "ج) الجزاء الإداري.", "د) الجزاء الديني."], ans: 1 },
+        { q: "أي فرع من فروع القانون يهتم بتنظيم السلطة التنفيذية ووظائفها الإدارية؟", opts: ["أ) القانون الدستوري.", "ب) القانون الإداري.", "ج) القانون المالي.", "د) القانون الجنائي."], ans: 1 },
+        { q: "ما هي الحقوق التي يتطلب إعمالها تدخلاً إيجابياً من الدولة لتوفيرها؟", opts: ["أ) الحقوق الاقتصادية والاجتماعية والثقافية.", "ب) الحقوق المدنية والسياسية.", "ج) الحقوق الجماعية.", "د) جميع الإجابات صحيحة."], ans: 0 },
+        { q: "يكفل العهد الدولي الخاص بالحقوق الاقتصادية والاجتماعية لعام 1966 للعمال الحق في:", opts: ["أ) العمل دون حدود لساعات العمل.", "ب) تشكيل النقابات وحق الإضراب.", "ج) الحصول على قروض مالية دون رد.", "د) تملك المصانع التي يعملون بها."], ans: 1 },
+        { q: "ما هي النظرية التي ترى أن الإنسان يولد بحقوق طبيعية ثابتة لا يمكن المساس بها؟", opts: ["أ) نظرية القانون الطبيعي.", "ب) نظرية الحقوق الفردية.", "ج) نظرية الحقوق الجماعية.", "د) نظرية الحقوق الاجتماعية."], ans: 0 },
+        { q: "ماذا ينظم 'القانون الدولي العام'؟", opts: ["أ) علاقات الأفراد من جنسيات مختلفة.", "ب) علاقة الدول ببعضها البعض في السلم والحرب.", "ج) نظام الحكم داخل الدولة الواحدة.", "د) علاقات التجار في الصفقات الدولية."], ans: 1 },
+        { q: "ما هو المصدر الأساسي للقانون الدولي العام الذي يختلف عن القانون الداخلي؟", opts: ["أ) التشريع.", "ب) العرف.", "ج) المعاهدات.", "د) أحكام المحاكم الدولية."], ans: 1 },
+        { q: "ما هو الأساس الموضوعي لحقوق الإنسان؟", opts: ["أ) السيادة الوطنية.", "ب) الكرامة الإنسانية المتأصلة.", "ج) الإرادة الدولية.", "د) العقد الاجتماعي."], ans: 1 },
+        { q: "أي من التالي ليس من خصائص حقوق الإنسان؟", opts: ["أ) عدم قابليتها للتنازل.", "ب) شموليتها وعالميتها.", "ج) قابليتها للانتزاع أو التقييد المطلق.", "د) عدم سقوطها بالتقادم."], ans: 2 },
+        { q: "قانون العقوبات وقانون الإجراءات الجنائية هما فرعا أي قانون؟", opts: ["أ) القانون المدني.", "ب) القانون الإداري.", "ج) القانون الجنائي.", "د) القانون الدولي."], ans: 2 },
+        { q: "بما توصف طبيعة ممارسة حقوق الإنسان في الواقع؟", opts: ["أ) هي حقوق نسبية تخضع لقيود مشروعة لمصلحة المجتمع.", "ب) هي حقوق مطلقة لا يمكن تقييدها بأي حال.", "ج) هي حقوق اختيارية حسب الثقافة السائدة.", "د) هي حقوق ثابتة لا تتطور بتطور الزمن."], ans: 0 },
+        { q: "المبدأ الذي يؤكد أن حقوق الإنسان مترابطة ولا يمكن فصلها هو:", opts: ["أ) العالمية.", "ب) عدم التمييز.", "ج) التكامل والاعتماد المتبادل.", "د) سيادة القانون."], ans: 2 },
+        { q: "يعتبر التعذيب 'تعذيباً' في مفهوم الاتفاقية الدولية إذا تم بواسطة:", opts: ["أ) موظف عام أو أي شخص يتصرف بصفة رسمية.", "ب) أي فرد عادي ضد فرد آخر.", "ج) منظمات إرهابية فقط.", "د) جماعات إثنية معينة."], ans: 0 },
+        { q: "ما هي المنظمة الدولية التي لم يذكر ميثاقها (عهدها) حقوق الإنسان صراحة؟", opts: ["أ) هيئة الأمم المتحدة.", "ب) عصبة الأمم.", "ج) منظمة العمل الدولية.", "د) مجلس الأمن."], ans: 1 },
+        { q: "ما هي أول وثيقة دولية اعترفت بحقوق الإنسان كأحد مبادئ القانون الدولي؟", opts: ["أ) الإعلان العالمي لحقوق الإنسان 1948.", "ب) العهد الدولي للحقوق المدنية والسياسية.", "ج) ميثاق الأمم المتحدة 1945.", "د) إعلان فيينا 1993."], ans: 2 },
+        { q: "استثنت اتفاقية اللاجئين لعام 1951 بعض الأفراد من الحماية، مثل:", opts: ["أ) الأشخاص بلا جنسية.", "ب) الأشخاص المضطهدين سياسياً.", "ج) مجرمي الحرب أو مرتكبي الجرائم ضد الإنسانية.", "د) الأشخاص المقيمين خارج بلدهم الأصلي."], ans: 2 },
+        { q: "المسؤولية الأساسية في منع جريمة الإبادة الجماعية ومعاقبة مرتكبيها تقع على:", opts: ["أ) الأمم المتحدة.", "ب) محكمة العدل الدولية.", "ج) الدولة التي تقع فيها الجريمة أو الدولة الطرف.", "د) مجلس الأمن."], ans: 2 },
+        { q: "تتعلق البروتوكولات الاختيارية لعام 2000 الملحقة باتفاقية حقوق الطفل بـ:", opts: ["أ) حق الطفل في التعليم والصحة.", "ب) اشتراك الأطفال في المنازعات المسلحة وبيع الأطفال واستغلالهم.", "ج) زواج الأطفال وحق التعبير عن الرأي.", "د) حق الطفل في التملك واللجوء."], ans: 1 },
+        { q: "تعتبر الإبادة الجماعية جريمة دولية إذا ارتكبت:", opts: ["أ) في زمن الحرب فقط.", "ب) في زمن السلم فقط.", "ج) سواء في زمن السلم أو في زمن الحرب.", "د) إذا كانت تستهدف تدمير جماعة تدميراً جزئياً فقط."], ans: 2 },
+        { q: "يُعرف 'الطفل' في اتفاقية حقوق الطفل بأنه كل شخص لم يبلغ:", opts: ["أ) الحادية والعشرين من عمره.", "ب) الثامنة عشرة من عمره.", "ج) الخامسة عشرة من عمره.", "د) سن الرشد."], ans: 1 },
+        { q: "تكمن أهمية العهدين الدوليين لعام 1966 في أنهما:", opts: ["أ) يقتصران على الحقوق المدنية فقط.", "ب) يشملان كل الحقوق الرئيسية (مدنية، سياسية، اقتصادية، اجتماعية).", "ج) صدرا في نفس يوم صدور الإعلان العالمي.", "د) لا يحتاجان إلى تصديق."], ans: 1 },
+        { q: "أي من الآتي يمثل استثناءً في تعريف التمييز ضد المرأة حسب اتفاقية 'سيداو'؟", opts: ["أ) أي تفرقة أو استبعاد.", "ب) أي تقييد لحقوق المرأة.", "ج) عدم إشراك المرأة في الحياة الاجتماعية والسياسية.", "د) إحباط الاعتراف بالحقوق."], ans: 2 },
+        { q: "ما هي القيمة القانونية للإعلان العالمي لحقوق الإنسان لعام 1948؟", opts: ["أ) التزام قانوني مطلق كونه اتفاقية.", "ب) لم يكتسب أي قيمة قانونية.", "ج) قرار توصية، وأصبح جزءاً من القانون الدولي العرفي.", "د) لا يمكن للقضاة الإشارة إليه."], ans: 2 },
+        { q: "ما هو 'حجر الأساس' الذي مهد الطريق لتمتع الأفراد بحقوق الإنسان؟", opts: ["أ) الإعلان العالمي لحقوق الإنسان.", "ب) ميثاق الأمم المتحدة لعام 1945.", "ج) العهد الدولي الخاص بالحقوق المدنية.", "د) الشرعة الدولية."], ans: 1 },
+        { q: "الحقوق التي تضمن للمرأة عن طريق التشريع واللوائح تشمل:", opts: ["أ) الحق في التملك والتنقل.", "ب) حق التصويت والترشيح للهيئات الانتخابية.", "ج) حق تقرير المصير.", "د) حق الضمان الاجتماعي."], ans: 1 },
+        { q: "أي فرع من فروع القانون يركز على القواعد المنظمة لإيرادات ونفقات الدولة؟", opts: ["أ) القانون الدستوري.", "ب) القانون الإداري.", "ج) القانون الجنائي.", "د) القانون المالي."], ans: 3 },
+        { q: "أي من الحقوق التالية يندرج تحت فئة الحقوق المدنية؟", opts: ["أ) حرية التعبير.", "ب) حرية الرأي.", "ج) المساواة وعدم التمييز.", "د) جميع ما سبق."], ans: 3 },
+        { q: "السمتان اللتان تميزان 'القانون التجاري' عن 'القانون المدني' هما:", opts: ["أ) البطء والتعقيد.", "ب) السرعة والائتمان.", "ج) السيادة والسلطة.", "د) الزجر والردع."], ans: 1 },
+        { q: "أنشأ القانون رقم 94 لسنة 2003 في مصر:", opts: ["أ) المجلس القومي للمرأة.", "ب) مجلس حقوق الإنسان بالأمم المتحدة.", "ج) المجلس القومي لحقوق الإنسان في مصر.", "د) محكمة الجنايات الدولية."], ans: 2 },
+        { q: "تعتبر النقابات المهنية ركيزة للديمقراطية لأنها تضمن:", opts: ["أ) احتكار المهن لأعضائها.", "ب) حق التجمع المهني لتعزيز المصالح المشتركة.", "ج) إلزام الدولة بتوظيف الخريجين.", "د) منع العمل في القطاع الخاص."], ans: 1 },
+        { q: "متى تخضع العلاقة لقواعد القانون الخاص حتى لو كانت الدولة طرفاً فيها؟", opts: ["أ) عندما تستخدم سلطتها العامة وسيادتها.", "ب) عندما تهدف إلى تحقيق مصلحة عامة.", "ج) عندما لا تظهر الدولة بصفتها صاحبة سلطة عامة.", "د) لا تخضع الدولة أبداً للقانون الخاص."], ans: 2 },
+        { q: "الحق في بيئة نظيفة يفرض واجباً على الدول والأفراد هو:", opts: ["أ) استغلال الموارد الطبيعية بأقصى طاقة.", "ب) دفع ضرائب دولية للبيئة.", "ج) صيانة البيئة ومكافحة التلوث بجميع صوره.", "د) ترك الصناعة."], ans: 2 },
+        { q: "الحق في الأمان الشخصي والسلامة الجسدية:", opts: ["أ) يجوز للشخص التنازل عنه.", "ب) يسقط بمرور الزمن.", "ج) لا يجوز التصرف فيه أو التنازل عنه.", "د) يمنح فقط في أوقات السلم."], ans: 2 },
+        { q: "تمنع الاتفاقية الدولية للقضاء على التمييز العنصري التمييز بسبب، باستثناء:", opts: ["أ) الأصل أو اللون.", "ب) الدين.", "ج) الآراء السياسية.", "د) الأصل واللون والدين."], ans: 2 },
+        { q: "بدأ نفاذ ميثاق الأمم المتحدة بتاريخ:", opts: ["أ) 10 ديسمبر 1948.", "ب) 16 ديسمبر 1966.", "ج) 3 يناير 1976.", "د) 24 أكتوبر 1945."], ans: 3 },
+        { q: "الجهاز الدولي المسؤول مسؤولية أساسية عن حفظ السلم والأمن الدوليين هو:", opts: ["أ) الجمعية العامة.", "ب) مجلس الأمن.", "ج) اليونسكو.", "د) لجنة حقوق الإنسان."], ans: 1 },
+        { q: "المنظمة الدولية التي تضع معايير العمل الدولية وتحمي حقوق العمال هي:", opts: ["أ) منظمة اليونسكو.", "ب) منظمة الصحة العالمية.", "ج) منظمة العمل الدولية.", "د) منظمة الفاو."], ans: 2 },
+        { q: "أي من الآتي ليس من خصائص القاعدة القانونية؟", opts: ["أ) عامة ومجردة.", "ب) تنظم سلوك الأفراد في المجتمع.", "ج) قاعدة اختيارية للأفراد.", "د) قاعدة ملزمة تقترن بجزاء مادي."], ans: 2 },
+        { q: "اتخذت الدول الأطراف إجراءات بموجب المادة 12 من العهد الدولي لتحسين:", opts: ["أ) مستوى التسليح العسكري.", "ب) الصحة البيئية والوقاية من الأمراض الوبائية.", "ج) سرية المعلومات الحكومية.", "د) التبادل السياحي فقط."], ans: 1 },
+        { q: "ما هو سبب فشل المفكرين الغربيين في الوصول لفهم شامل لحقيقة الإنسان؟", opts: ["أ) تركيزهم على الجوانب الدينية.", "ب) اعتمادهم الكلي على العقل الذي من طبيعته القصور.", "ج) اتفاقهم جميعاً على أن الإنسان شرير بطبعه.", "د) تحديدهم غاية واضحة لوجود الإنسان."], ans: 1 },
+        { q: "'الحق في الضمان الاجتماعي' يهدف إلى:", opts: ["أ) توفير رحلات ترفيهية.", "ب) زيادة الضرائب.", "ج) كفالة المعونة للمواطنين في حالات الشيخوخة أو العجز.", "د) إجبار الأفراد على الادخار."], ans: 2 },
+        { q: "تحمي المحكمة الدستورية العليا الحقوق من خلال:", opts: ["أ) تشريع قوانين جديدة.", "ب) رقابتها القضائية على دستورية القوانين.", "ج) إدارة السجون.", "د) تمثيل مصر دولياً."], ans: 1 },
+        { q: "القواعد القانونية تهتم أساساً بتنظيم:", opts: ["أ) النوايا الداخلية.", "ب) المعاملات الاقتصادية فقط.", "ج) السلوك الخارجي للأفراد.", "د) المعاملات الأسرية فقط."], ans: 2 },
+        { q: "العامل المشترك لتقدم الغرب في حماية حقوق الإنسان هو:", opts: ["أ) منظمات غير حكومية فقط.", "ب) وجود آليات رقابة فعالة وتحديد واضح للحقوق.", "ج) فرض عقوبات اقتصادية.", "د) تجاهل الانتهاكات."], ans: 1 },
 
-    // --- FROM: REVISION SEC.pdf ---
-    {q: "Where do you go to change slide size (e.g., Standard, Widescreen, or custom dimensions)?", a: ["Home tab→ Layout", "Design tab → Slide Size", "Insert tab → Shapes", "View tab→ Slide Master"], c: 1},
-    {q: "Which Insert tab command lets you add a vector diagram such as Process, Cycle, or Hierarchy?", a: ["SmartArt", "Shapes", "Chart", "Screenshot"], c: 0},
-    {q: "Which PowerPoint feature lets you change the theme's font, color, or effects for the whole presentation?", a: ["Variants in the Design tab", "Transitions tab→ Effect Options", "Animations tab → Animation Painter", "Insert tab → Text Box"], c: 0},
-    {q: "How do you apply the same transition effect to every slide quickly?", a: ["Right-click each slide", "Design tab → Variants → Apply to All", "Transitions tab → select effect → Apply To All", "Animations tab→ Apply to All"], c: 2},
-    {q: "What is the primary purpose of the Animation Painter?", a: ["To preview animations", "To copy animation effects from one object to another", "To remove all animations", "To set the animation start time"], c: 1},
-    {q: "Which animation type is used to make an object appear on the slide?", a: ["Exit", "Motion Path", "Entrance", "Emphasis"], c: 2},
-    {q: "To insert a mathematical formula into a slide, which command should you use?", a: ["Insert -> Symbols", "Insert → Equation", "Design → Background", "Home → Format Painter"], c: 1},
-    {q: "Which feature allows a specific animation to start only when you click a designated object on the same slide?", a: ["Animation Painter", "Trigger", "Effect Options", "Slide Master"], c: 1},
-    {q: "If you want a different background color or transparency for one slide only, where can you change it?", a: ["Design → Format Background → Apply", "View → Slide Sorter", "Transitions → Effect Options", "Insert → Background Style"], c: 0},
-    {q: "Which File tab option lets you save your presentation as a PDF or other file type?", a: ["Save", "Export or Save As", "Share", "Info"], c: 1},
-    {q: "How many slide layouts are typically available in PowerPoint?", a: ["3", "5", "7", "10"], c: 3},
-    {q: "To insert a new slide, which tab would you use?", a: ["Transition", "Home", "Design", "View"], c: 1},
-    {q: "Which of the following is NOT an option in the Insert tab?", a: ["Table", "SmartArt", "Animation", "Chart"], c: 2},
-    {q: "What is the primary function of the Transitions tab?", a: ["Adding animation effects to objects", "Inserting images", "Adding animation effects between slides"], c: 2},
-    {q: "What is the primary function of the Animation tab?", a: ["Adding animation effects to objects", "Inserting images", "Adding animation effects between slides"], c: 0},
-    {q: "If you want to apply a theme to only the current slide, what action should you take?", a: ["Right-click the theme and select 'Apply to Selected Slides'", "Double-click the theme", "Click the Design tab and choose 'Current Slide Only'", "Themes always apply to all slides"], c: 0},
-    {q: "In Excel, formulas always begin with which symbol?", a: ["@", "$", "#", "="], c: 3},
-    {q: "What is the purpose of the Auto Fill feature in Excel?", a: ["Deleting empty cells", "Generating sequences like numbers", "Backing up files", "Removing duplicates"], c: 1},
-    {q: "What is the name of the feature that allows you to apply a consistent design (colors, fonts, effects) to an entire presentation?", a: ["Animation", "Slide Master", "Layout", "Theme"], c: 3},
-    {q: "Which view in PowerPoint is used primarily for changing the slide order, deleting slides, or applying a transition to multiple slides at once?", a: ["Normal View", "Reading View", "Slide Sorter View", "Outline View"], c: 2},
-    {q: "What term is used for the visual effects applied to individual objects on a slide (like text or images)?", a: ["Transitions", "Themes", "Animations", "Design"], c: 2},
-    {q: "What is the special slide that holds the formatting and placeholders for all the slides in a presentation?", a: ["Outline View", "Handout Master", "Slide Master", "Presenter View"], c: 2},
-    {q: "Which tool would you use to add spoken commentary, music, or other sound effects to your presentation?", a: ["Animations Pane", "Notes Pane", "Design Tab", "Insert > Audio"], c: 3},
-    {q: "The area below the slide pane in Normal View, where you can add information visible only to the presenter, is called the:", a: ["Outline Pane", "Notes Pane", "Task Pane", "Reading Pane"], c: 1},
-    {q: "In PowerPoint, which option allows you to adjust the proportions of your slides (4:3 vs 16:9)?", a: ["Slide Orientation", "Slide Size", "Layout Style", "Presentation View"], c: 1},
-    {q: "Which image formatting tool is used to isolate the subject of a photo by making the surrounding areas transparent?", a: ["Recolor", "Picture Effects", "Remove Background", "Color Saturation"], c: 2},
-    {q: "When you want to add a picture, clip art, chart, or shape to your slide, which ribbon tab should you click?", a: ["Data", "Review", "Animation", "Insert"], c: 3}
-];
+        // --- ثانياً: أسئلة الصواب والخطأ ---
+        { q: "نطاق قواعد الدين أضيق من نطاق قواعد القانون.", opts: ["صواب", "خطأ"], ans: 1 },
+        { q: "توجد سبع اتفاقيات دولية أساسية لحقوق الإنسان.", opts: ["صواب", "خطأ"], ans: 0 },
+        { q: "ضعف نظام حقوق الإنسان العربي سببه تردي الوضع الاقتصادي والاجتماعي والصراعات.", opts: ["صواب", "خطأ"], ans: 0 },
+        { q: "القانون المدني المصري ينظم مسائل الأحوال الشخصية كالزواج والطلاق.", opts: ["صواب", "خطأ"], ans: 1 },
+        { q: "حقوق الإنسان في أصلها مسألة وطنية داخلية لأن الحكومات وطنية.", opts: ["صواب", "خطأ"], ans: 1 },
+        { q: "قانون المرافعات المدنية والتجارية يتضمن قواعد تنتمي للقانون العام والقانون الخاص.", opts: ["صواب", "خطأ"], ans: 0 },
+        { q: "تعتبر ضمانات الدفاع من المبادئ الأساسية في المحاكم الجنائية الدولية.", opts: ["صواب", "خطأ"], ans: 0 },
+        { q: "القانون الدولي الخاص يحدد المحكمة المختصة في العلاقات ذات العنصر الأجنبي.", opts: ["صواب", "خطأ"], ans: 0 },
+        { q: "يسبق مفهوم 'تعزيز' حقوق الإنسان مفهوم 'حماية' حقوق الإنسان زمنياً.", opts: ["صواب", "خطأ"], ans: 0 },
+        { q: "قانون العمل يخضع بالكامل لقواعد القانون المدني.", opts: ["صواب", "خطأ"], ans: 1 },
+        { q: "الحق في العمل يعد أحد الحقوق الأساسية لمبدأ الحريات.", opts: ["صواب", "خطأ"], ans: 0 },
+        { q: "في القانون التجاري، يجوز إعطاء المدين نظرة ميسرة (أجل قضائي) كما في القانون المدني.", opts: ["صواب", "خطأ"], ans: 1 },
+        { q: "حقوق الإنسان قابلة للتجزئة ويمكن فصلها عن بعضها البعض.", opts: ["صواب", "خطأ"], ans: 1 },
+        { q: "القانون الدولي الخاص يتضمن قواعد لحل النزاعات الموضوعية.", opts: ["صواب", "خطأ"], ans: 1 },
+        { q: "ساهمت الثورة الصناعية في تقدم حقوق الإنسان في العصر الحديث.", opts: ["صواب", "خطأ"], ans: 0 },
+        { q: "القواعد القانونية الآمرة هي التي يجوز للأفراد الاتفاق على مخالفتها.", opts: ["صواب", "خطأ"], ans: 1 },
+        { q: "يسمح نظام المحكمة العربية لحقوق الإنسان للأفراد برفع شكاوى مباشرة دون قيد.", opts: ["صواب", "خطأ"], ans: 1 },
+        { q: "فكرة النظام العام فكرة نسبية تختلف من بلد لآخر ومن زمن لآخر.", opts: ["صواب", "خطأ"], ans: 0 },
+        { q: "يمكن للدول ربط التزامها بحقوق الإنسان بمعاملة الدول الأخرى بالمثل.", opts: ["صواب", "خطأ"], ans: 1 },
+        { q: "قواعد القانون العام كلها متعلقة بالنظام العام.", opts: ["صواب", "خطأ"], ans: 0 },
+        { q: "قواعد العدالة تعتبر مصدراً احتياطياً للقانون يلجأ إليها القاضي عند فقد النص.", opts: ["صواب", "خطأ"], ans: 0 },
+        { q: "الأساس الفلسفي لحقوق الإنسان يرتبط بالعلاقة مع الحقوق الطبيعية.", opts: ["صواب", "خطأ"], ans: 0 },
+        { q: "العقد هو شريعة المتعاقدين إلا إذا خالف النظام العام والآداب.", opts: ["صواب", "خطأ"], ans: 0 },
+        { q: "إنشاء هيئة الأمم المتحدة شهد توطين القانون الدولي لحقوق الإنسان.", opts: ["صواب", "خطأ"], ans: 0 },
+        { q: "حق الملكية هو أحد الحقوق العينية الأصلية.", opts: ["صواب", "خطأ"], ans: 0 },
+        { q: "حق الملكية له وظيفة اجتماعية في خدمة الاقتصاد العام.", opts: ["صواب", "خطأ"], ans: 0 },
+        { q: "لا يجوز فرض الحراسة على الملكية الخاصة إلا بحكم قضائي.", opts: ["صواب", "خطأ"], ans: 0 },
+        { q: "الحق في التنمية لا يمكن فصله عن بقية الحقوق المدنية والسياسية.", opts: ["صواب", "خطأ"], ans: 0 },
+        { q: "للمنازل حرمة؛ فلا يجوز دخولها أو تفتيشها إلا بأمر قضائي مسبب.", opts: ["صواب", "خطأ"], ans: 0 },
+        { q: "يحق للدول الخمس دائمة العضوية في مجلس الأمن استخدام حق النقض 'الفيتو'.", opts: ["صواب", "خطأ"], ans: 0 },
+        { q: "لكل شخص الحق في الحصول على العمل الذي يختاره.", opts: ["صواب", "خطأ"], ans: 0 },
+        { q: "يجوز حرمان الشخص من جنسيته تعسفاً إذا رأت الدولة مصلحة في ذلك.", opts: ["صواب", "خطأ"], ans: 1 },
+        { q: "الحق في الجنسية ليس حقاً أساسياً من حقوق الإنسان.", opts: ["صواب", "خطأ"], ans: 1 },
+        { q: "الحق في الصحة، كحق من حقوق الإنسان، مذكور في العهد الدولي للحقوق الاقتصادية والاجتماعية.", opts: ["صواب", "خطأ"], ans: 0 },
+        { q: "نصت المادة الأولى في العهدين الدوليين (1966) على حق الشعوب في تقرير مصيرها.", opts: ["صواب", "خطأ"], ans: 0 },
+        { q: "يجوز للدولة تقييد حرية المعتقد الديني في جميع الظروف.", opts: ["صواب", "خطأ"], ans: 1 },
+        { q: "السلام الذاتي هو نوع من أنواع السلام الذي يستهدف حماية وتأمين الفرد.", opts: ["صواب", "خطأ"], ans: 0 },
+        { q: "تختص اللجنة الأوروبية لحقوق الإنسان بالنظر في الطعون والشكاوى المقدمة من الأفراد.", opts: ["صواب", "خطأ"], ans: 0 },
+        { q: "الحصانة الدبلوماسية أو الصفة الرسمية تحول دون ممارسة المحكمة الجنائية الدولية لاختصاصها.", opts: ["صواب", "خطأ"], ans: 1 },
+        { q: "أنشئت المحكمة الأفريقية لحقوق الإنسان عام 1998 بموجب بروتوكول واغادوغو.", opts: ["صواب", "خطأ"], ans: 0 },
+        { q: "تختص المحكمة الجنائية الدولية بالنظر في الجرائم قبل نفاذ نظامها (الأثر الرجعي).", opts: ["صواب", "خطأ"], ans: 1 },
+        { q: "أنشئت اللجنة الأفريقية لحقوق الإنسان عام 1987 بموجب الميثاق الأفريقي.", opts: ["صواب", "خطأ"], ans: 0 },
+        { q: "آلية الاستعراض الدوري تتيح للدولة توضيح وضعها مرة كل 4 سنوات.", opts: ["صواب", "خطأ"], ans: 0 },
+        { q: "أنشئت اللجنة العربية لحقوق الإنسان استناداً للمادة (45) من الميثاق العربي.", opts: ["صواب", "خطأ"], ans: 0 }
+    ];
 
-let scoreC = 0, scoreW = 0, current = 0;
-const quizBox = document.getElementById('quiz-box');
-document.getElementById('total-count').innerText = questions.length;
+    let current = 0, corrects = 0, wrongs = 0, history = [];
+    document.getElementById('total-q-stat').innerText = String(bank.length).padStart(2, '0');
 
-function loadQuiz() {
-    questions.forEach((q, i) => {
-        const card = document.createElement('div');
-        card.className = 'q-card';
-        card.innerHTML = `<span class="q-text">${i+1}. ${q.q}</span><div class="options">
-            ${q.a.map((opt, idx) => `<div class="option" onclick="check(${i}, ${idx}, this)">${opt}</div>`).join('')}
+    function render() {
+        if (current >= bank.length) return finish();
+        const item = bank[current];
+        const mount = document.getElementById('quiz-mount');
+        mount.innerHTML = `<div class="q-card active">
+            <div class="q-text">${item.q}</div>
+            <div class="options-list">
+                ${item.opts.map((o, i) => `<div class="option" onclick="check(this, ${i})">${o}</div>`).join('')}
+            </div>
         </div>`;
-        quizBox.appendChild(card);
-    });
-}
-
-window.check = (qI, aI, btn) => {
-    const card = btn.parentElement.parentElement;
-    if(card.classList.contains('disabled')) return;
-    card.classList.add('disabled');
-    current++;
-    const correctIdx = questions[qI].c;
-    if(aI === correctIdx) { btn.classList.add('correct'); scoreC++; }
-    else { btn.classList.add('wrong'); card.querySelectorAll('.option')[correctIdx].classList.add('correct'); scoreW++; }
-    document.getElementById('c-count').innerText = scoreC;
-    document.getElementById('w-count').innerText = scoreW;
-    document.getElementById('p-count').innerText = current;
-    if(current === questions.length) {
-        window.scrollTo(0,0);
-        quizBox.style.display = 'none';
-        document.getElementById('main-title').style.display = 'none';
-        document.getElementById('final-screen').style.display = 'block';
-        document.getElementById('final-score-pct').innerText = Math.round((scoreC/questions.length)*100) + "%";
-        document.getElementById('final-c').innerText = scoreC;
-        document.getElementById('final-w').innerText = scoreW;
+        document.getElementById('current-idx').innerText = String(current + 1).padStart(2, '0');
     }
-}
-loadQuiz();
+
+    window.check = (el, idx) => {
+        const ans = bank[current].ans;
+        const opts = el.parentElement.querySelectorAll('.option');
+        opts.forEach(o => o.classList.add('disabled'));
+        const isOk = idx === ans;
+        
+        history.push({ q: bank[current].q, u: bank[current].opts[idx], c: bank[current].opts[ans], ok: isOk });
+        
+        if (isOk) { 
+            el.classList.add('correct'); 
+            corrects++; 
+            document.getElementById('correct-count').innerText = corrects;
+        } else { 
+            el.classList.add('wrong'); 
+            opts[ans].classList.add('correct'); 
+            wrongs++;
+            document.getElementById('wrong-count').innerText = wrongs;
+        }
+        
+        setTimeout(() => { current++; render(); }, 1000);
+    };
+
+    function finish() {
+        document.getElementById('quiz-mount').style.display = 'none';
+        document.getElementById('result-screen').style.display = 'block';
+        document.getElementById('final-score-val').innerText = Math.round((corrects / bank.length) * 100) + '%';
+    }
+
+    window.showReview = () => {
+        const container = document.getElementById('review-container');
+        container.innerHTML = history.map(h => `<div class="rev-item" style="border-right-color: ${h.ok ? 'var(--accent-green)' : 'var(--accent-red)'}">
+            <div style="font-weight:700; margin-bottom:5px;">${h.q}</div>
+            <div style="font-size:0.85rem; color:${h.ok ? 'var(--accent-green)' : 'var(--accent-red)'}">اختيارك: ${h.u}</div>
+            ${!h.ok ? `<div style="font-size:0.85rem; color:var(--accent-green)">الإجابة الصحيحة: ${h.c}</div>` : ''}
+        </div>`).join('');
+        document.getElementById('review-btn').style.display = 'none';
+    };
+
+    render();
 </script>
 </body>
 </html>
-
-
